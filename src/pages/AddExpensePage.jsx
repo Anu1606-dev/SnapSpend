@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { addExpense, clearExpenseError } from '../features/expenses/expensesSlice'
+import { suggestCategory } from '../services/gemini'
 import { CATEGORIES } from '../utils/categories'
 
 export default function AddExpensePage() {
@@ -11,11 +12,26 @@ export default function AddExpensePage() {
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
   const [note, setNote] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
+  const [suggesting, setSuggesting] = useState(false)
+  const [suggestError, setSuggestError] = useState('')
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
   const { status, error } = useSelector((state) => state.expenses)
+
+  const handleSuggestCategory = async () => {
+    setSuggestError('')
+    setSuggesting(true)
+    try {
+      const suggested = await suggestCategory(merchant, note)
+      setCategory(suggested)
+    } catch {
+      setSuggestError("Couldn't get a suggestion — pick a category manually.")
+    } finally {
+      setSuggesting(false)
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -26,8 +42,6 @@ export default function AddExpensePage() {
       addExpense({ userId: user.uid, amount, merchant, category, date, note })
     )
 
-    // addExpense.fulfilled.match(result) checks whether THIS dispatch succeeded,
-    // without relying on shared Redux state (which could be stale/racy).
     if (addExpense.fulfilled.match(result)) {
       setSuccessMessage('Expense saved!')
       setAmount('')
@@ -76,7 +90,17 @@ export default function AddExpensePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-gray-700">Category</label>
+              <button
+                type="button"
+                onClick={handleSuggestCategory}
+                disabled={!merchant || suggesting}
+                className="text-xs text-purple-600 hover:underline disabled:text-gray-300 disabled:no-underline"
+              >
+                {suggesting ? 'Thinking...' : '✨ Suggest with AI'}
+              </button>
+            </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -86,6 +110,7 @@ export default function AddExpensePage() {
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
+            {suggestError && <p className="text-xs text-amber-600 mt-1">{suggestError}</p>}
           </div>
 
           <div>

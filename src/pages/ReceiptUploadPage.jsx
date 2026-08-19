@@ -12,7 +12,6 @@ export default function ReceiptUploadPage() {
   const [extractError, setExtractError] = useState('')
   const [extracted, setExtracted] = useState(false)
 
-  // Form fields — populated by Gemini, editable by the user before saving
   const [merchant, setMerchant] = useState('')
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
@@ -45,12 +44,14 @@ export default function ReceiptUploadPage() {
       setMerchant(data.merchant || '')
       setAmount(data.amount != null ? String(data.amount) : '')
       setDate(data.date || new Date().toISOString().split('T')[0])
+      // The enum constraint guarantees data.category is one of CATEGORIES,
+      // but we double-check with .includes() as a safety net anyway.
+      setCategory(CATEGORIES.includes(data.category) ? data.category : CATEGORIES[0])
       setExtracted(true)
     } catch {
       setExtractError(
         "Couldn't read that receipt automatically. You can still enter the details manually below."
       )
-      // Even on failure, show the form so the user can fill it in by hand
       setDate(new Date().toISOString().split('T')[0])
       setExtracted(true)
     } finally {
@@ -69,7 +70,6 @@ export default function ReceiptUploadPage() {
 
     if (addExpense.fulfilled.match(result)) {
       setSuccessMessage('Expense saved!')
-      // Reset everything for the next receipt
       setSelectedFile(null)
       setPreviewUrl(null)
       setExtracted(false)
@@ -91,7 +91,6 @@ export default function ReceiptUploadPage() {
           </button>
         </div>
 
-        {/* Step 1: choose a photo */}
         {!selectedFile && (
           <div>
             <label className="block w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400">
@@ -106,7 +105,6 @@ export default function ReceiptUploadPage() {
           </div>
         )}
 
-        {/* Step 2: preview + extract button */}
         {selectedFile && !extracted && (
           <div className="space-y-4">
             <img
@@ -133,7 +131,6 @@ export default function ReceiptUploadPage() {
           </div>
         )}
 
-        {/* Step 3: review & confirm form */}
         {extracted && (
           <form onSubmit={handleSubmit} className="space-y-4">
             {extractError && (
@@ -171,7 +168,9 @@ export default function ReceiptUploadPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Category <span className="text-xs text-gray-400 font-normal">(AI-suggested, edit if wrong)</span>
+              </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
