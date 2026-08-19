@@ -12,12 +12,18 @@ export default function HomePage() {
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Welcome to SnapSpend</h1>
         <p className="text-gray-600 mb-6">Logged in as {user?.email}</p>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
           <Link
             to="/add-expense"
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
           >
             + Add Expense
+          </Link>
+          <Link
+            to="/scan-receipt"
+            className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700"
+          >
+            📷 Scan Receipt
           </Link>
           <button
             onClick={() => dispatch(logOutUser())}

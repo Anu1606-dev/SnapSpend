@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import AddExpensePage from './pages/AddExpensePage'
+import ReceiptUploadPage from './pages/ReceiptUploadPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -26,6 +27,14 @@ function App() {
         element={
           <ProtectedRoute>
             <AddExpensePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/scan-receipt"
+        element={
+          <ProtectedRoute>
+            <ReceiptUploadPage />
           </ProtectedRoute>
         }
       />
