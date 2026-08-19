@@ -48,10 +48,9 @@ export default function ReceiptUploadPage() {
       // but we double-check with .includes() as a safety net anyway.
       setCategory(CATEGORIES.includes(data.category) ? data.category : CATEGORIES[0])
       setExtracted(true)
-    } catch {
-      setExtractError(
-        "Couldn't read that receipt automatically. You can still enter the details manually below."
-      )
+    } catch (err) {
+      console.error('Receipt extraction failed:', err)
+      setExtractError("Gemini's service is temporarily busy — wait a few seconds and try again, or enter the details manually below.")
       setDate(new Date().toISOString().split('T')[0])
       setExtracted(true)
     } finally {

@@ -26,8 +26,9 @@ export default function AddExpensePage() {
     try {
       const suggested = await suggestCategory(merchant, note)
       setCategory(suggested)
-    } catch {
-      setSuggestError("Couldn't get a suggestion — pick a category manually.")
+    } catch (err) {
+      console.error('Category suggestion failed:', err)
+      setSuggestError("Gemini's service is temporarily busy — wait a few seconds and try again.")
     } finally {
       setSuggesting(false)
     }
