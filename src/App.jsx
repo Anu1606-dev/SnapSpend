@@ -3,6 +3,7 @@ import { useAuthListener } from './hooks/useAuthListener'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
+import AddExpensePage from './pages/AddExpensePage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -17,6 +18,14 @@ function App() {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/add-expense"
+        element={
+          <ProtectedRoute>
+            <AddExpensePage />
           </ProtectedRoute>
         }
       />
