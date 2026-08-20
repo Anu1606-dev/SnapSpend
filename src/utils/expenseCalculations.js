@@ -61,3 +61,10 @@ export function getMonthlyTrend(expenses, monthsCount = 6) {
 
   return months
 }
+
+export function getTodayTotal(expenses) {
+  const todayKey = getLocalDateString()
+  return expenses
+    .filter((exp) => exp.date === todayKey)
+    .reduce((sum, exp) => sum + Number(exp.amount), 0)
+}
