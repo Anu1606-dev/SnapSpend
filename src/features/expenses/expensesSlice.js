@@ -1,5 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+  serverTimestamp,
+} from 'firebase/firestore'
 import { db } from '../../services/firebase'
 
 export const addExpense = createAsyncThunk(
@@ -11,7 +21,7 @@ export const addExpense = createAsyncThunk(
         amount: Number(amount),
         merchant,
         category,
-        date,          // stored as 'YYYY-MM-DD' string
+        date,
         note: note || '',
         createdAt: serverTimestamp(),
       })
@@ -30,10 +40,50 @@ export const addExpense = createAsyncThunk(
   }
 )
 
+export const fetchExpenses = createAsyncThunk(
+  'expenses/fetchExpenses',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const q = query(collection(db, 'expenses'), where('userId', '==', userId))
+      const snapshot = await getDocs(q)
+      return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
+export const updateExpense = createAsyncThunk(
+  'expenses/updateExpense',
+  async ({ id, amount, merchant, category, date, note }, { rejectWithValue }) => {
+    try {
+      const changes = { amount: Number(amount), merchant, category, date, note: note || '' }
+      await updateDoc(doc(db, 'expenses', id), changes)
+      return { id, ...changes }
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
+export const deleteExpense = createAsyncThunk(
+  'expenses/deleteExpense',
+  async (id, { rejectWithValue }) => {
+    try {
+      await deleteDoc(doc(db, 'expenses', id))
+      return id
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
 const initialState = {
   items: [],
-  status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+  status: 'idle',      // for adding
   error: null,
+  fetchStatus: 'idle',  // for the list fetch — separate so Add and List pages don't interfere with each other
+  fetchError: null,
 }
 
 const expensesSlice = createSlice({
@@ -52,11 +102,32 @@ const expensesSlice = createSlice({
       })
       .addCase(addExpense.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.items.unshift(action.payload) // newest expense goes to the front
+        state.items.unshift(action.payload)
       })
       .addCase(addExpense.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.payload
+      })
+      .addCase(fetchExpenses.pending, (state) => {
+        state.fetchStatus = 'loading'
+        state.fetchError = null
+      })
+      .addCase(fetchExpenses.fulfilled, (state, action) => {
+        state.fetchStatus = 'succeeded'
+        state.items = action.payload
+      })
+      .addCase(fetchExpenses.rejected, (state, action) => {
+        state.fetchStatus = 'failed'
+        state.fetchError = action.payload
+      })
+      .addCase(updateExpense.fulfilled, (state, action) => {
+        const index = state.items.findIndex((item) => item.id === action.payload.id)
+        if (index !== -1) {
+          state.items[index] = { ...state.items[index], ...action.payload }
+        }
+      })
+      .addCase(deleteExpense.fulfilled, (state, action) => {
+        state.items = state.items.filter((item) => item.id !== action.payload)
       })
   },
 })

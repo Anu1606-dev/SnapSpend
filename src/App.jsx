@@ -5,6 +5,7 @@ import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import AddExpensePage from './pages/AddExpensePage'
 import ReceiptUploadPage from './pages/ReceiptUploadPage'
+import ExpenseListPage from './pages/ExpenseListPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -38,8 +39,16 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/expenses"
+        element={
+          <ProtectedRoute>
+            <ExpenseListPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   )
 }
 
-export default App
+export default App;
