@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { fetchExpenses, updateExpense, deleteExpense } from '../features/expenses/expensesSlice'
-import { CATEGORIES } from '../utils/categories'
+import { CATEGORIES, CATEGORY_COLORS } from '../utils/categories'
 
 export default function ExpenseListPage() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
   const { items, fetchStatus, fetchError } = useSelector((state) => state.expenses)
 
@@ -24,13 +22,13 @@ export default function ExpenseListPage() {
     }
   }, [user, dispatch])
 
-  // Dates are stored as 'YYYY-MM-DD' strings — that format sorts and compares
-  // correctly with plain string operators (<, >, >=), no need to parse into Date objects.
   const filtered = items
     .filter((exp) => filterCategory === 'All' || exp.category === filterCategory)
     .filter((exp) => !startDate || exp.date >= startDate)
     .filter((exp) => !endDate || exp.date <= endDate)
     .sort((a, b) => (a.date < b.date ? 1 : -1))
+
+  const hasActiveFilters = filterCategory !== 'All' || startDate || endDate
 
   const handleEditClick = (expense) => {
     setEditingId(expense.id)
@@ -70,103 +68,116 @@ export default function ExpenseListPage() {
     setEndDate('')
   }
 
+  const inputClass =
+    'px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
+
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Your Expenses</h1>
-          <button onClick={() => navigate('/')} className="text-sm text-blue-600 hover:underline">
-            ← Back home
-          </button>
+    <div className="max-w-4xl mx-auto p-6 md:p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Your Expenses</h1>
+        <p className="text-slate-500 text-sm mt-1">
+          {filtered.length} expense{filtered.length !== 1 ? 's' : ''}
+          {hasActiveFilters ? ' matching your filters' : ' total'}
+        </p>
+      </div>
+
+      {/* Filter bar */}
+      <div className="bg-white rounded-2xl shadow-sm p-4 mb-6 flex flex-wrap gap-4 items-end">
+        <div>
+          <label className="block text-xs font-medium text-slate-500 mb-1.5">Category</label>
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            className={`${inputClass} bg-white`}
+          >
+            <option value="All">All</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
         </div>
 
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6 flex flex-wrap gap-4 items-end">
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Category</label>
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-            >
-              <option value="All">All</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
+        <div>
+          <label className="block text-xs font-medium text-slate-500 mb-1.5">From</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className={inputClass}
+          />
+        </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">From</label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-            />
-          </div>
+        <div>
+          <label className="block text-xs font-medium text-slate-500 mb-1.5">To</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className={inputClass}
+          />
+        </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">To</label>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-            />
-          </div>
-
-          <button onClick={clearFilters} className="text-sm text-gray-500 hover:underline pb-2">
+        {hasActiveFilters && (
+          <button
+            onClick={clearFilters}
+            className="text-sm text-slate-500 hover:text-slate-700 font-medium pb-2"
+          >
             Clear filters
           </button>
+        )}
+      </div>
 
-          <div className="ml-auto text-sm text-gray-500 pb-2">
-            {filtered.length} expense{filtered.length !== 1 ? 's' : ''}
+      {/* List */}
+      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+        {fetchStatus === 'loading' && (
+          <p className="text-center text-slate-400 text-sm py-12">Loading expenses...</p>
+        )}
+
+        {fetchStatus === 'failed' && (
+          <p className="text-center text-red-600 text-sm py-12">{fetchError}</p>
+        )}
+
+        {fetchStatus === 'succeeded' && filtered.length === 0 && (
+          <div className="text-center py-12 px-6">
+            <p className="text-slate-500 text-sm">
+              {hasActiveFilters ? 'No expenses match these filters.' : 'No expenses yet.'}
+            </p>
           </div>
-        </div>
+        )}
 
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          {fetchStatus === 'loading' && (
-            <p className="p-6 text-center text-gray-500">Loading expenses...</p>
-          )}
+        {filtered.map((expense) => {
+          const color = CATEGORY_COLORS[expense.category] || '#6b7280'
 
-          {fetchStatus === 'failed' && (
-            <p className="p-6 text-center text-red-600">{fetchError}</p>
-          )}
-
-          {fetchStatus === 'succeeded' && filtered.length === 0 && (
-            <p className="p-6 text-center text-gray-500">No expenses match these filters yet.</p>
-          )}
-
-          {filtered.map((expense) => (
-            <div key={expense.id} className="border-b border-gray-100 last:border-b-0 p-4">
+          return (
+            <div key={expense.id} className="border-b border-slate-50 last:border-b-0 px-5 py-4">
               {editingId === expense.id ? (
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Amount</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Amount</label>
                       <input
                         type="number"
                         step="0.01"
                         value={editForm.amount}
                         onChange={(e) => setEditForm({ ...editForm, amount: e.target.value })}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm"
+                        className={`${inputClass} w-full py-1.5`}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Merchant</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Merchant</label>
                       <input
                         type="text"
                         value={editForm.merchant}
                         onChange={(e) => setEditForm({ ...editForm, merchant: e.target.value })}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm"
+                        className={`${inputClass} w-full py-1.5`}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Category</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Category</label>
                       <select
                         value={editForm.category}
                         onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm"
+                        className={`${inputClass} w-full py-1.5 bg-white`}
                       >
                         {CATEGORIES.map((cat) => (
                           <option key={cat} value={cat}>{cat}</option>
@@ -174,34 +185,34 @@ export default function ExpenseListPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Date</label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Date</label>
                       <input
                         type="date"
                         value={editForm.date}
                         onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm"
+                        className={`${inputClass} w-full py-1.5`}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Note</label>
+                    <label className="block text-xs font-medium text-slate-500 mb-1">Note</label>
                     <input
                       type="text"
                       value={editForm.note}
                       onChange={(e) => setEditForm({ ...editForm, note: e.target.value })}
-                      className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm"
+                      className={`${inputClass} w-full py-1.5`}
                     />
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 pt-1">
                     <button
                       onClick={() => handleEditSave(expense.id)}
-                      className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm hover:bg-blue-700"
+                      className="bg-amber-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
                     >
                       Save
                     </button>
                     <button
                       onClick={handleEditCancel}
-                      className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm hover:bg-gray-300"
+                      className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-slate-200 transition-colors"
                     >
                       Cancel
                     </button>
@@ -209,40 +220,51 @@ export default function ExpenseListPage() {
                 </div>
               ) : (
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-gray-800 truncate">{expense.merchant}</p>
-                      <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
-                        {expense.category}
-                      </span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ backgroundColor: color }}
+                    />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-medium text-slate-800 truncate">{expense.merchant}</p>
+                        <span
+                          className="text-xs font-medium px-2 py-0.5 rounded-full shrink-0"
+                          style={{ backgroundColor: `${color}1A`, color }}
+                        >
+                          {expense.category}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {expense.date}
+                        {expense.note && ` · ${expense.note}`}
+                      </p>
                     </div>
-                    <p className="text-sm text-gray-500">
-                      {expense.date}
-                      {expense.note && ` · ${expense.note}`}
-                    </p>
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
-                    <p className="font-semibold text-gray-800">₹{Number(expense.amount).toFixed(2)}</p>
-                    <button
-                      onClick={() => handleEditClick(expense)}
-                      className="text-sm text-blue-600 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(expense.id)}
-                      disabled={deletingId === expense.id}
-                      className="text-sm text-red-600 hover:underline disabled:opacity-50"
-                    >
-                      {deletingId === expense.id ? 'Deleting...' : 'Delete'}
-                    </button>
+                    <p className="font-semibold text-slate-900">₹{Number(expense.amount).toFixed(2)}</p>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleEditClick(expense)}
+                        className="text-xs font-medium text-slate-500 hover:text-blue-600 hover:bg-blue-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(expense.id)}
+                        disabled={deletingId === expense.id}
+                        className="text-xs font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        {deletingId === expense.id ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-          ))}
-        </div>
+          )
+        })}
       </div>
     </div>
   )
