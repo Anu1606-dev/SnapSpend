@@ -25,6 +25,9 @@ export default function HomePage() {
           <Link to="/dashboard" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
             📊 Dashboard
           </Link>
+          <Link to="/chat" className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+            💬 Ask AI
+          </Link>
           <button
             onClick={() => dispatch(logOutUser())}
             className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"

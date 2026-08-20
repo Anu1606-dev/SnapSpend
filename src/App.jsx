@@ -7,6 +7,7 @@ import AddExpensePage from './pages/AddExpensePage'
 import ReceiptUploadPage from './pages/ReceiptUploadPage'
 import ExpenseListPage from './pages/ExpenseListPage'
 import DashboardPage from './pages/DashboardPage'
+import ChatPage from './pages/ChatPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -53,6 +54,14 @@ function App() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute>
+            <ChatPage />
           </ProtectedRoute>
         }
       />
