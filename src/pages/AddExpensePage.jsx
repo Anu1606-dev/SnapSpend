@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { addExpense, clearExpenseError } from '../features/expenses/expensesSlice'
 import { suggestCategory } from '../services/gemini'
 import { CATEGORIES } from '../utils/categories'
+import { getLocalDateString } from '../utils/date'
 
 export default function AddExpensePage() {
   const [amount, setAmount] = useState('')
   const [merchant, setMerchant] = useState('')
   const [category, setCategory] = useState(CATEGORIES[0])
-  const [date, setDate] = useState(() => new Date().toISOString().split('T')[0])
+  const [date, setDate] = useState(() => getLocalDateString())
   const [note, setNote] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [suggesting, setSuggesting] = useState(false)
@@ -48,7 +49,7 @@ export default function AddExpensePage() {
       setAmount('')
       setMerchant('')
       setCategory(CATEGORIES[0])
-      setDate(new Date().toISOString().split('T')[0])
+      setDate(getLocalDateString())
       setNote('')
     }
   }

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { extractReceiptData } from '../services/gemini'
 import { addExpense, clearExpenseError } from '../features/expenses/expensesSlice'
 import { CATEGORIES } from '../utils/categories'
+import { getLocalDateString } from '../utils/date'
 
 export default function ReceiptUploadPage() {
   const [selectedFile, setSelectedFile] = useState(null)
@@ -43,15 +44,17 @@ export default function ReceiptUploadPage() {
       const data = await extractReceiptData(selectedFile)
       setMerchant(data.merchant || '')
       setAmount(data.amount != null ? String(data.amount) : '')
-      setDate(data.date || new Date().toISOString().split('T')[0])
+      setDate(data.date || getLocalDateString())
       // The enum constraint guarantees data.category is one of CATEGORIES,
       // but we double-check with .includes() as a safety net anyway.
       setCategory(CATEGORIES.includes(data.category) ? data.category : CATEGORIES[0])
       setExtracted(true)
     } catch (err) {
       console.error('Receipt extraction failed:', err)
-      setExtractError("Gemini's service is temporarily busy — wait a few seconds and try again, or enter the details manually below.")
-      setDate(new Date().toISOString().split('T')[0])
+      setExtractError(
+        "Gemini's service is temporarily busy — wait a few seconds and try again, or enter the details manually below."
+      )
+      setDate(getLocalDateString())
       setExtracted(true)
     } finally {
       setExtracting(false)
