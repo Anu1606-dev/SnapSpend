@@ -23,7 +23,7 @@ export default function Sidebar() {
   return (
     <aside className="hidden md:flex md:flex-col w-60 shrink-0 bg-slate-900 text-slate-200 min-h-screen sticky top-0">
       <div className="px-6 py-6">
-        <span className="text-xl font-extrabold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+        <span className="text-xl font-extrabold bg-linear-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
           SnapSpend
         </span>
       </div>

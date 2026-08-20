@@ -222,7 +222,7 @@ export default function ExpenseListPage() {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3 flex-shrink-0">
+                  <div className="flex items-center gap-3 shrink-0">
                     <p className="font-semibold text-gray-800">₹{Number(expense.amount).toFixed(2)}</p>
                     <button
                       onClick={() => handleEditClick(expense)}

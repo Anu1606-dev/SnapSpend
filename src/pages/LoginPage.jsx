@@ -27,7 +27,7 @@ export default function LoginPage() {
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-32 -left-16 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
 
-        <span className="relative text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+        <span className="relative text-2xl font-extrabold bg-linear-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
           SnapSpend
         </span>
 
@@ -47,7 +47,7 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center bg-slate-50 px-6 py-12">
         <div className="w-full max-w-sm">
           <div className="lg:hidden text-center mb-8">
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent">
+            <span className="text-2xl font-extrabold bg-linear-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent">
               SnapSpend
             </span>
           </div>

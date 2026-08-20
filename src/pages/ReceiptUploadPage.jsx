@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { extractReceiptData } from '../services/gemini'
 import { addExpense, clearExpenseError } from '../features/expenses/expensesSlice'
 import { CATEGORIES } from '../utils/categories'
@@ -21,7 +20,6 @@ export default function ReceiptUploadPage() {
   const [successMessage, setSuccessMessage] = useState('')
 
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
   const { status } = useSelector((state) => state.expenses)
 
@@ -45,8 +43,6 @@ export default function ReceiptUploadPage() {
       setMerchant(data.merchant || '')
       setAmount(data.amount != null ? String(data.amount) : '')
       setDate(data.date || getLocalDateString())
-      // The enum constraint guarantees data.category is one of CATEGORIES,
-      // but we double-check with .includes() as a safety net anyway.
       setCategory(CATEGORIES.includes(data.category) ? data.category : CATEGORIES[0])
       setExtracted(true)
     } catch (err) {
@@ -83,28 +79,28 @@ export default function ReceiptUploadPage() {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Scan Receipt</h1>
-          <button onClick={() => navigate('/')} className="text-sm text-blue-600 hover:underline">
-            ← Back home
-          </button>
-        </div>
+  const handleChooseDifferent = () => {
+    setSelectedFile(null)
+    setPreviewUrl(null)
+  }
 
+  return (
+    <div className="max-w-xl mx-auto p-6 md:p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Scan Receipt</h1>
+        <p className="text-slate-500 text-sm mt-1">Let AI read the details for you.</p>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
         {!selectedFile && (
-          <div>
-            <label className="block w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400">
-              <span className="text-gray-500">Tap to choose a receipt photo</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
-          </div>
+          <label className="flex flex-col items-center justify-center gap-3 w-full border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-colors">
+            <span className="text-4xl">📷</span>
+            <div>
+              <p className="text-sm font-medium text-slate-700">Tap to choose a receipt photo</p>
+              <p className="text-xs text-slate-400 mt-1">JPG or PNG works best</p>
+            </div>
+            <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+          </label>
         )}
 
         {selectedFile && !extracted && (
@@ -112,21 +108,19 @@ export default function ReceiptUploadPage() {
             <img
               src={previewUrl}
               alt="Receipt preview"
-              className="w-full rounded-lg border border-gray-200 max-h-80 object-contain"
+              className="w-full rounded-2xl border border-slate-100 max-h-80 object-contain bg-slate-50"
             />
             <button
               onClick={handleExtract}
               disabled={extracting}
-              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-2.5 rounded-full font-semibold text-sm hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {extracting ? 'Reading receipt...' : 'Extract Details'}
+              {extracting && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
+              {extracting ? 'Reading receipt...' : '✨ Extract Details'}
             </button>
             <button
-              onClick={() => {
-                setSelectedFile(null)
-                setPreviewUrl(null)
-              }}
-              className="w-full text-sm text-gray-500 hover:underline"
+              onClick={handleChooseDifferent}
+              className="w-full text-sm text-slate-400 hover:text-slate-600 transition-colors"
             >
               Choose a different photo
             </button>
@@ -134,49 +128,59 @@ export default function ReceiptUploadPage() {
         )}
 
         {extracted && (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {extractError && (
-              <p className="text-sm text-amber-700 bg-amber-50 p-2 rounded">{extractError}</p>
+              <p className="text-sm text-amber-700 bg-amber-50 border border-amber-100 px-3 py-2 rounded-xl">
+                {extractError}
+              </p>
             )}
 
             <img
               src={previewUrl}
               alt="Receipt preview"
-              className="w-full rounded-lg border border-gray-200 max-h-56 object-contain"
+              className="w-full rounded-2xl border border-slate-100 max-h-56 object-contain bg-slate-50"
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Amount</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">₹</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                  className="w-full pl-8 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Merchant</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Merchant</label>
               <input
                 type="text"
                 value={merchant}
                 onChange={(e) => setMerchant(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category <span className="text-xs text-gray-400 font-normal">(AI-suggested, edit if wrong)</span>
-              </label>
+              <div className="flex items-center gap-2 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700">Category</label>
+                {!extractError && (
+                  <span className="text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">
+                    ✨ AI suggested
+                  </span>
+                )}
+              </div>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow bg-white"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -185,34 +189,38 @@ export default function ReceiptUploadPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Note (optional)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                Note <span className="text-slate-400 font-normal">(optional)</span>
+              </label>
               <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 rows={2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow resize-none"
               />
             </div>
 
             {successMessage && (
-              <p className="text-sm text-green-700 bg-green-50 p-2 rounded">{successMessage}</p>
+              <p className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-xl">
+                {successMessage}
+              </p>
             )}
 
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="w-full bg-amber-500 text-white py-2.5 rounded-full font-semibold text-sm hover:bg-amber-600 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {status === 'loading' ? 'Saving...' : 'Confirm & Save Expense'}
             </button>
