@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Camera, Sparkles } from 'lucide-react'
 import { extractReceiptData } from '../services/gemini'
 import { addExpense, clearExpenseError } from '../features/expenses/expensesSlice'
 import { CATEGORIES } from '../utils/categories'
@@ -94,7 +95,7 @@ export default function ReceiptUploadPage() {
       <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
         {!selectedFile && (
           <label className="flex flex-col items-center justify-center gap-3 w-full border-2 border-dashed border-slate-200 rounded-2xl p-12 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-colors">
-            <span className="text-4xl">📷</span>
+            <Camera size={36} className="text-slate-300" strokeWidth={1.5} />
             <div>
               <p className="text-sm font-medium text-slate-700">Tap to choose a receipt photo</p>
               <p className="text-xs text-slate-400 mt-1">JPG or PNG works best</p>
@@ -115,8 +116,8 @@ export default function ReceiptUploadPage() {
               disabled={extracting}
               className="w-full bg-blue-600 text-white py-2.5 rounded-full font-semibold text-sm hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {extracting && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-              {extracting ? 'Reading receipt...' : '✨ Extract Details'}
+              <Sparkles size={16} className={extracting ? 'animate-pulse' : ''} />
+              {extracting ? 'Reading receipt...' : 'Extract Details'}
             </button>
             <button
               onClick={handleChooseDifferent}
@@ -172,8 +173,9 @@ export default function ReceiptUploadPage() {
               <div className="flex items-center gap-2 mb-1.5">
                 <label className="block text-sm font-medium text-slate-700">Category</label>
                 {!extractError && (
-                  <span className="text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">
-                    ✨ AI suggested
+                  <span className="flex items-center gap-1 text-xs font-medium text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">
+                    <Sparkles size={11} />
+                    AI suggested
                   </span>
                 )}
               </div>

@@ -1,14 +1,15 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { Home, LayoutDashboard, List, Plus, Camera, MessageCircle, LogOut } from 'lucide-react'
 import { logOutUser } from '../features/auth/authSlice'
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Home', icon: '🏠' },
-  { to: '/dashboard', label: 'Dashboard', icon: '📊' },
-  { to: '/expenses', label: 'Expenses', icon: '📋' },
-  { to: '/add-expense', label: 'Add Expense', icon: '➕' },
-  { to: '/scan-receipt', label: 'Scan Receipt', icon: '📷' },
-  { to: '/chat', label: 'Ask AI', icon: '💬' },
+  { to: '/', label: 'Home', icon: Home },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/expenses', label: 'Expenses', icon: List },
+  { to: '/add-expense', label: 'Add Expense', icon: Plus },
+  { to: '/scan-receipt', label: 'Scan Receipt', icon: Camera },
+  { to: '/chat', label: 'Ask AI', icon: MessageCircle },
 ]
 
 export default function Sidebar() {
@@ -29,23 +30,26 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-3 space-y-1">
-        {NAV_ITEMS.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.to === '/'}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-slate-800 text-white'
-                  : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
-              }`
-            }
-          >
-            <span className="text-base">{item.icon}</span>
-            {item.label}
-          </NavLink>
-        ))}
+        {NAV_ITEMS.map((item) => {
+          const Icon = item.icon
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-slate-800 text-white'
+                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
+                }`
+              }
+            >
+              <Icon size={18} strokeWidth={2} />
+              {item.label}
+            </NavLink>
+          )
+        })}
       </nav>
 
       <div className="px-3 pb-6">
@@ -53,7 +57,7 @@ export default function Sidebar() {
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-red-400 transition-colors"
         >
-          <span className="text-base">🚪</span>
+          <LogOut size={18} strokeWidth={2} />
           Log Out
         </button>
       </div>

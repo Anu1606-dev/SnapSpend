@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Sparkles } from 'lucide-react'
 import { addExpense, clearExpenseError } from '../features/expenses/expensesSlice'
 import { suggestCategory } from '../services/gemini'
 import { CATEGORIES } from '../utils/categories'
@@ -97,9 +98,10 @@ export default function AddExpensePage() {
                 type="button"
                 onClick={handleSuggestCategory}
                 disabled={!merchant || suggesting}
-                className="text-xs font-medium text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full hover:bg-violet-100 disabled:opacity-40 disabled:hover:bg-violet-50 transition-colors"
+                className="flex items-center gap-1 text-xs font-medium text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full hover:bg-violet-100 disabled:opacity-40 disabled:hover:bg-violet-50 transition-colors"
               >
-                {suggesting ? 'Thinking...' : '✨ Suggest with AI'}
+                <Sparkles size={12} />
+                {suggesting ? 'Thinking...' : 'Suggest with AI'}
               </button>
             </div>
             <select

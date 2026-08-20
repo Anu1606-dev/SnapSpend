@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { Home, List, LayoutDashboard, MessageCircle, Plus, PenLine, Camera } from 'lucide-react'
 
 export default function BottomNav() {
   const [showActions, setShowActions] = useState(false)
@@ -24,14 +25,14 @@ export default function BottomNav() {
               onClick={() => goTo('/add-expense')}
               className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-slate-50"
             >
-              <span className="text-lg">✍️</span>
+              <PenLine size={20} className="text-slate-600" />
               <span className="text-xs font-medium text-slate-600">Manual</span>
             </button>
             <button
               onClick={() => goTo('/scan-receipt')}
               className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-slate-50"
             >
-              <span className="text-lg">📷</span>
+              <Camera size={20} className="text-slate-600" />
               <span className="text-xs font-medium text-slate-600">Scan</span>
             </button>
           </div>
@@ -40,29 +41,29 @@ export default function BottomNav() {
 
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 flex items-center px-2 pb-[env(safe-area-inset-bottom)]">
         <NavLink to="/" end className={linkClass}>
-          <span className="text-lg">🏠</span>
+          <Home size={20} />
           Home
         </NavLink>
         <NavLink to="/expenses" className={linkClass}>
-          <span className="text-lg">📋</span>
+          <List size={20} />
           Expenses
         </NavLink>
 
         <div className="flex-1 flex justify-center -mt-5">
           <button
             onClick={() => setShowActions((s) => !s)}
-            className="w-14 h-14 rounded-full bg-amber-500 text-white text-2xl shadow-lg flex items-center justify-center hover:bg-amber-600 transition-colors"
+            className="w-14 h-14 rounded-full bg-amber-500 text-white shadow-lg flex items-center justify-center hover:bg-amber-600 transition-colors"
           >
-            +
+            <Plus size={26} strokeWidth={2.5} />
           </button>
         </div>
 
         <NavLink to="/dashboard" className={linkClass}>
-          <span className="text-lg">📊</span>
+          <LayoutDashboard size={20} />
           Stats
         </NavLink>
         <NavLink to="/chat" className={linkClass}>
-          <span className="text-lg">💬</span>
+          <MessageCircle size={20} />
           Chat
         </NavLink>
       </nav>

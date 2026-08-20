@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { PenLine, Camera } from 'lucide-react'
 import { fetchExpenses } from '../features/expenses/expensesSlice'
 import { CATEGORY_COLORS } from '../utils/categories'
 import { getCurrentMonthTotal, getTodayTotal } from '../utils/expenseCalculations'
@@ -39,15 +40,13 @@ export default function HomePage() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-8">
-      {/* Greeting */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
-          {getGreeting()}{user?.email ? `, ${getFriendlyName(user.email)}` : ''} 👋
+          {getGreeting()}{user?.email ? `, ${getFriendlyName(user.email)}` : ''}
         </h1>
         <p className="text-slate-500 text-sm mt-1">Here's where things stand today.</p>
       </div>
 
-      {/* Quick stats */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="bg-white rounded-2xl shadow-sm p-5">
           <p className="text-sm text-slate-500 mb-1">Today</p>
@@ -59,14 +58,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Quick actions */}
       <div className="grid sm:grid-cols-2 gap-4 mb-10">
         <Link
           to="/add-expense"
           className="group bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
-            ✍️
+          <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <PenLine size={22} className="text-amber-600" />
           </div>
           <div>
             <p className="font-semibold text-slate-900">Add Expense</p>
@@ -78,8 +76,8 @@ export default function HomePage() {
           to="/scan-receipt"
           className="group bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform">
-            📷
+          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Camera size={22} className="text-blue-600" />
           </div>
           <div>
             <p className="font-semibold text-slate-900">Scan Receipt</p>
@@ -88,7 +86,6 @@ export default function HomePage() {
         </Link>
       </div>
 
-      {/* Recent activity */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <h2 className="font-semibold text-slate-900">Recent Activity</h2>
