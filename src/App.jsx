@@ -9,6 +9,7 @@ import ExpenseListPage from './pages/ExpenseListPage'
 import DashboardPage from './pages/DashboardPage'
 import ChatPage from './pages/ChatPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import AppLayout from './components/AppLayout'
 
 function App() {
   useAuthListener()
@@ -17,54 +18,21 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+
       <Route
-        path="/"
         element={
           <ProtectedRoute>
-            <HomePage />
+            <AppLayout />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/add-expense"
-        element={
-          <ProtectedRoute>
-            <AddExpensePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/scan-receipt"
-        element={
-          <ProtectedRoute>
-            <ReceiptUploadPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/expenses"
-        element={
-          <ProtectedRoute>
-            <ExpenseListPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <ChatPage />
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route path="/" element={<HomePage />} />
+        <Route path="/add-expense" element={<AddExpensePage />} />
+        <Route path="/scan-receipt" element={<ReceiptUploadPage />} />
+        <Route path="/expenses" element={<ExpenseListPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+      </Route>
     </Routes>
   )
 }
