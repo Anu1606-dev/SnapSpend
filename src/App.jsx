@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import AddExpensePage from './pages/AddExpensePage'
 import ReceiptUploadPage from './pages/ReceiptUploadPage'
 import ExpenseListPage from './pages/ExpenseListPage'
+import DashboardPage from './pages/DashboardPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -47,8 +48,16 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   )
 }
 
-export default App;
+export default App

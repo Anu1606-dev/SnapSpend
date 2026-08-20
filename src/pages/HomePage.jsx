@@ -22,6 +22,9 @@ export default function HomePage() {
           <Link to="/expenses" className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800">
             📋 View Expenses
           </Link>
+          <Link to="/dashboard" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+            📊 Dashboard
+          </Link>
           <button
             onClick={() => dispatch(logOutUser())}
             className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
