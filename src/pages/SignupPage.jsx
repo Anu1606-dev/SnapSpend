@@ -21,52 +21,86 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Create your account</h1>
+    <div className="min-h-screen flex">
+      <div className="hidden lg:flex lg:w-1/2 bg-slate-900 flex-col justify-between p-12 relative overflow-hidden">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-16 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+        <span className="relative text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+          SnapSpend
+        </span>
+
+        <div className="relative">
+          <p className="text-3xl font-bold text-white leading-snug mb-4">
+            Start tracking in<br />under a minute.
+          </p>
+          <p className="text-slate-400 text-sm max-w-sm">
+            No spreadsheets, no manual math. Just snap, ask, and know.
+          </p>
+        </div>
+
+        <p className="relative text-xs text-slate-500">© 2026 SnapSpend</p>
+      </div>
+
+      <div className="flex-1 flex items-center justify-center bg-slate-50 px-6 py-12">
+        <div className="w-full max-w-sm">
+          <div className="lg:hidden text-center mb-8">
+            <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent">
+              SnapSpend
+            </span>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <p className="text-xs text-gray-500 mt-1">At least 6 characters</p>
-          </div>
+          <h1 className="text-2xl font-bold text-slate-900 mb-1">Create your account</h1>
+          <p className="text-sm text-slate-500 mb-8">Start understanding your spending today.</p>
 
-          {error && <p className="text-sm text-red-600 bg-red-50 p-2 rounded">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="you@example.com"
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={status === 'loading'}
-            className="w-full bg-blue-600 text-white py-2 rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            {status === 'loading' ? 'Creating account...' : 'Sign Up'}
-          </button>
-        </form>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                placeholder="At least 6 characters"
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+              />
+            </div>
 
-        <p className="text-sm text-gray-600 mt-4 text-center">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Log in
-          </Link>
-        </p>
+            {error && (
+              <p className="text-sm text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-xl">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="w-full bg-amber-500 text-white py-2.5 rounded-full font-semibold text-sm hover:bg-amber-600 active:scale-[0.98] transition-all disabled:opacity-50"
+            >
+              {status === 'loading' ? 'Creating account...' : 'Sign Up'}
+            </button>
+          </form>
+
+          <p className="text-sm text-slate-500 mt-6 text-center">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600 font-medium hover:underline">
+              Log in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
