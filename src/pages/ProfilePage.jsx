@@ -11,34 +11,37 @@ export default function ProfilePage() {
   const { user } = useSelector((state) => state.auth)
   const { firstName, lastName, avatarColor, fetchStatus, saveStatus, error } = useSelector((state) => state.profile)
 
-  const [firstNameInput, setFirstNameInput] = useState('')
-  const [lastNameInput, setLastNameInput] = useState('')
-  const [selectedColor, setSelectedColor] = useState(AVATAR_COLORS[0])
+  const [firstNameInput, setFirstNameInput] = useState(undefined)
+  const [lastNameInput, setLastNameInput] = useState(undefined)
+  const [selectedColor, setSelectedColor] = useState(undefined)
   const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     if (user) dispatch(fetchProfile(user.uid))
   }, [user, dispatch])
 
-  useEffect(() => {
-    setFirstNameInput(firstName || '')
-    setLastNameInput(lastName || '')
-    setSelectedColor(avatarColor || AVATAR_COLORS[0])
-  }, [firstName, lastName, avatarColor])
+  const effectiveFirstName = firstNameInput ?? firstName ?? ''
+  const effectiveLastName = lastNameInput ?? lastName ?? ''
+  const effectiveSelectedColor = selectedColor ?? avatarColor ?? AVATAR_COLORS[0]
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     dispatch(clearProfileError())
     setSuccessMessage('')
     const result = await dispatch(
-      saveProfile({ userId: user.uid, firstName: firstNameInput, lastName: lastNameInput, avatarColor: selectedColor })
+      saveProfile({
+        userId: user.uid,
+        firstName: effectiveFirstName,
+        lastName: effectiveLastName,
+        avatarColor: effectiveSelectedColor,
+      })
     )
     if (saveProfile.fulfilled.match(result)) {
       setSuccessMessage('Profile updated!')
     }
   }
 
-  const initial = firstNameInput ? firstNameInput.charAt(0).toUpperCase() : '?'
+  const initial = effectiveFirstName ? effectiveFirstName.charAt(0).toUpperCase() : '?'
 
   return (
     <div className="max-w-xl mx-auto p-6 md:p-8">
@@ -62,7 +65,7 @@ export default function ProfilePage() {
           <div className="flex justify-center mb-6">
             <span
               className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-colors duration-300"
-              style={{ backgroundColor: selectedColor }}
+              style={{ backgroundColor: effectiveSelectedColor }}
             >
               {initial}
             </span>
@@ -74,7 +77,7 @@ export default function ProfilePage() {
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">First Name</label>
                 <input
                   type="text"
-                  value={firstNameInput}
+                  value={effectiveFirstName}
                   onChange={(e) => setFirstNameInput(e.target.value)}
                   required
                   placeholder="e.g. Priya"
@@ -85,7 +88,7 @@ export default function ProfilePage() {
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Surname</label>
                 <input
                   type="text"
-                  value={lastNameInput}
+                  value={effectiveLastName}
                   onChange={(e) => setLastNameInput(e.target.value)}
                   placeholder="e.g. Sharma"
                   className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
@@ -105,7 +108,7 @@ export default function ProfilePage() {
                     style={{ backgroundColor: color }}
                     aria-label={`Choose avatar color ${color}`}
                   >
-                    {selectedColor === color && <Check size={16} className="text-white" />}
+                    {effectiveSelectedColor === color && <Check size={16} className="text-white" />}
                   </button>
                 ))}
               </div>
@@ -128,7 +131,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={saveStatus === 'loading'}
-              className="w-full py-2.5 rounded-full font-semibold text-sm text-white bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 shadow-sm shadow-violet-500/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-violet-500/40 active:translate-y-0 active:scale-[0.98] disabled:opacity-50"
+              className="w-full py-2.5 rounded-full font-semibold text-sm text-white bg-linear-to-r from-blue-500 via-violet-500 to-pink-500 shadow-sm shadow-violet-500/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-violet-500/40 active:translate-y-0 active:scale-[0.98] disabled:opacity-50"
             >
               {saveStatus === 'loading' ? 'Updating...' : 'Update Profile'}
             </button>

@@ -59,13 +59,6 @@ export default function BudgetPage() {
     }
   }, [user, dispatch])
 
-  useEffect(() => {
-    if (hasBudget) {
-      setIncomeInput(String(monthlyIncome))
-      setBudgetInput(String(monthlyBudget))
-    }
-  }, [hasBudget, monthlyIncome, monthlyBudget])
-
   const currentMonthTotal = useMemo(() => getCurrentMonthTotal(items), [items])
   const usualMonthlyAverage = useMemo(() => getUsualMonthlyAverage(items, 3), [items])
   const daysInMonth = getDaysInMonth()
@@ -109,7 +102,14 @@ export default function BudgetPage() {
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Set a target, track your pace, know where you stand.</p>
         </div>
         {hasBudget && !editing && (
-          <button onClick={() => setEditing(true)} className="btn-secondary flex items-center gap-1.5 px-4 py-2 text-sm">
+          <button
+            onClick={() => {
+              setIncomeInput(String(monthlyIncome))
+              setBudgetInput(String(monthlyBudget))
+              setEditing(true)
+            }}
+            className="btn-secondary flex items-center gap-1.5 px-4 py-2 text-sm"
+          >
             <Pencil size={14} />
             Edit
           </button>
