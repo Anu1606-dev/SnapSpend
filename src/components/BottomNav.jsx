@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, List, LayoutDashboard, MessageCircle, Plus, PenLine, Camera } from 'lucide-react'
+import { Home, List, LayoutDashboard, PiggyBank, MessageCircle, Plus, PenLine, Camera } from 'lucide-react'
 
 export default function BottomNav() {
   const [showActions, setShowActions] = useState(false)
   const navigate = useNavigate()
 
   const linkClass = ({ isActive }) =>
-    `flex flex-col items-center justify-center gap-0.5 flex-1 py-2 text-xs font-medium ${
+    `flex flex-col items-center justify-center gap-0.5 flex-1 py-2 text-[10px] font-medium ${
       isActive ? 'text-blue-600' : 'text-slate-400'
     }`
 
@@ -21,17 +21,11 @@ export default function BottomNav() {
       {showActions && (
         <div className="fixed inset-0 z-40 md:hidden" onClick={() => setShowActions(false)}>
           <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-3 bg-white rounded-2xl shadow-lg p-2 border border-slate-100">
-            <button
-              onClick={() => goTo('/add-expense')}
-              className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-slate-50"
-            >
+            <button onClick={() => goTo('/add-expense')} className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-slate-50">
               <PenLine size={20} className="text-slate-600" />
               <span className="text-xs font-medium text-slate-600">Manual</span>
             </button>
-            <button
-              onClick={() => goTo('/scan-receipt')}
-              className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-slate-50"
-            >
+            <button onClick={() => goTo('/scan-receipt')} className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl hover:bg-slate-50">
               <Camera size={20} className="text-slate-600" />
               <span className="text-xs font-medium text-slate-600">Scan</span>
             </button>
@@ -39,13 +33,13 @@ export default function BottomNav() {
         </div>
       )}
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 flex items-center px-2 pb-[env(safe-area-inset-bottom)]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 flex items-center px-1 pb-[env(safe-area-inset-bottom)]">
         <NavLink to="/" end className={linkClass}>
-          <Home size={20} />
+          <Home size={18} />
           Home
         </NavLink>
         <NavLink to="/expenses" className={linkClass}>
-          <List size={20} />
+          <List size={18} />
           Expenses
         </NavLink>
 
@@ -59,11 +53,15 @@ export default function BottomNav() {
         </div>
 
         <NavLink to="/dashboard" className={linkClass}>
-          <LayoutDashboard size={20} />
+          <LayoutDashboard size={18} />
           Stats
         </NavLink>
+        <NavLink to="/budget" className={linkClass}>
+          <PiggyBank size={18} />
+          Budget
+        </NavLink>
         <NavLink to="/chat" className={linkClass}>
-          <MessageCircle size={20} />
+          <MessageCircle size={18} />
           Chat
         </NavLink>
       </nav>

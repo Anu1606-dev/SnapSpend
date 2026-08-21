@@ -8,6 +8,7 @@ import ReceiptUploadPage from './pages/ReceiptUploadPage'
 import ExpenseListPage from './pages/ExpenseListPage'
 import DashboardPage from './pages/DashboardPage'
 import ChatPage from './pages/ChatPage'
+import BudgetPage from './pages/BudgetPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/AppLayout'
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/scan-receipt" element={<ReceiptUploadPage />} />
         <Route path="/expenses" element={<ExpenseListPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/budget" element={<BudgetPage />} />
         <Route path="/chat" element={<ChatPage />} />
       </Route>
     </Routes>

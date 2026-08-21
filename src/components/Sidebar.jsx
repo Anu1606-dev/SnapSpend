@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom'
-import { Home, LayoutDashboard, List, Plus, Camera, MessageCircle } from 'lucide-react'
+import { Home, LayoutDashboard, PiggyBank, List, Plus, Camera, MessageCircle } from 'lucide-react'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Home', icon: Home },
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/budget', label: 'Budget', icon: PiggyBank },
   { to: '/expenses', label: 'Expenses', icon: List },
   { to: '/add-expense', label: 'Add Expense', icon: Plus },
   { to: '/scan-receipt', label: 'Scan Receipt', icon: Camera },
@@ -29,13 +30,11 @@ export default function Sidebar() {
               end={item.to === '/'}
               className={({ isActive }) =>
                 `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-slate-800 text-white'
-                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
+                  isActive ? 'bg-slate-800 text-white' : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
                 }`
               }
             >
-              <Icon size={18} strokeWidth={2} className="transition-transform duration-200 group-hover:scale-110"/>
+              <Icon size={18} strokeWidth={2} className="transition-transform duration-200 group-hover:scale-110" />
               {item.label}
             </NavLink>
           )

@@ -5,8 +5,6 @@ body {
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Shared interactive motion, used on every primary/secondary button and
-   every hoverable card across the app — one place to tune the "feel". */
 .btn-primary {
   @apply bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-full
          shadow-sm shadow-amber-500/20 transition-all duration-200
@@ -24,4 +22,12 @@ body {
 
 .card-hover {
   @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
 }
