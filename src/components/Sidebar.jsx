@@ -28,14 +28,14 @@ export default function Sidebar() {
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-slate-800 text-white'
                     : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100'
                 }`
               }
             >
-              <Icon size={18} strokeWidth={2} />
+              <Icon size={18} strokeWidth={2} className="transition-transform duration-200 group-hover:scale-110"/>
               {item.label}
             </NavLink>
           )

@@ -157,7 +157,7 @@ export default function ChatPage() {
         <button
           type="submit"
           disabled={sending || !input.trim()}
-          className="w-11 h-11 shrink-0 bg-amber-500 text-white rounded-full flex items-center justify-center hover:bg-amber-600 active:scale-95 transition-all disabled:opacity-50"
+          className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-white bg-linear-to-r from-amber-500 to-orange-500 shadow-sm shadow-amber-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/30 active:translate-y-0 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0"
           aria-label="Send message"
         >
           <Send size={18} />

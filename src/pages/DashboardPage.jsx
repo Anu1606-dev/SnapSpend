@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { fetchExpenses } from '../features/expenses/expensesSlice'
 import { CATEGORY_COLORS } from '../utils/categories'
+import { getLocalDateString } from '../utils/date'
 import {
   getCurrentMonthTotal,
   getPreviousMonthTotal,
@@ -48,6 +49,7 @@ export default function DashboardPage() {
   const currentMonthCount = useMemo(() => getCurrentMonthCount(items), [items])
   const categoryBreakdown = useMemo(() => getCategoryBreakdown(items), [items])
   const monthlyTrend = useMemo(() => getMonthlyTrend(items, 6), [items])
+  const currentMonthKey = useMemo(() => getLocalDateString().slice(0, 7), [])
 
   const percentChange =
     previousMonthTotal > 0
@@ -73,7 +75,7 @@ export default function DashboardPage() {
         <>
           {/* Stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-2xl shadow-sm p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
                   <Wallet size={16} className="text-amber-600" />
@@ -93,7 +95,7 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                   <CalendarDays size={16} className="text-blue-600" />
@@ -103,7 +105,7 @@ export default function DashboardPage() {
               <p className="text-2xl font-bold text-slate-900">₹{previousMonthTotal.toFixed(2)}</p>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm p-5">
+            <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center">
                   <Receipt size={16} className="text-violet-600" />
@@ -148,18 +150,41 @@ export default function DashboardPage() {
 
           {/* Monthly trend */}
           <div className="bg-white rounded-2xl shadow-sm p-5 md:p-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-1">
               <BarChart3 size={18} className="text-slate-400" />
               <h2 className="font-semibold text-slate-900">Spending Trend</h2>
               <span className="text-xs text-slate-400">Last 6 months</span>
             </div>
+            <div className="flex items-center gap-4 mb-3 ml-6">
+              <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                Current month
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                Previous months
+              </div>
+            </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={monthlyTrend}>
+                <defs>
+                  <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#6366f1" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="label" tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={{ stroke: '#e2e8f0' }} />
                 <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={{ stroke: '#e2e8f0' }} />
                 <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} cursor={{ fill: '#f8fafc' }} />
-                <Bar dataKey="total" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="total" radius={[6, 6, 0, 0]}>
+                  {monthlyTrend.map((entry) => (
+                    <Cell
+                      key={entry.key}
+                      fill={entry.key === currentMonthKey ? '#f59e0b' : 'url(#trendGradient)'}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>

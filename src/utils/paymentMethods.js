@@ -1,0 +1,1 @@
+export const PAYMENT_METHODS = ['UPI', 'Card', 'Cash', 'Net Banking', 'Other']

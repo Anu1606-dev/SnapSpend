@@ -48,11 +48,11 @@ export default function HomePage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className="bg-white rounded-2xl shadow-sm p-5">
+        <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
           <p className="text-sm text-slate-500 mb-1">Today</p>
           <p className="text-2xl font-bold text-slate-900">₹{todayTotal.toFixed(2)}</p>
         </div>
-        <div className="bg-slate-900 rounded-2xl shadow-sm p-5">
+        <div className="bg-slate-900 rounded-2xl shadow-sm p-5 card-hover">
           <p className="text-sm text-slate-400 mb-1">This Month</p>
           <p className="text-2xl font-bold text-white">₹{monthTotal.toFixed(2)}</p>
         </div>
@@ -61,9 +61,9 @@ export default function HomePage() {
       <div className="grid sm:grid-cols-2 gap-4 mb-10">
         <Link
           to="/add-expense"
-          className="group bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow flex items-center gap-4"
+          className="group bg-white rounded-2xl shadow-sm p-6 card-hover flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-200">
             <PenLine size={22} className="text-amber-600" />
           </div>
           <div>
@@ -74,9 +74,9 @@ export default function HomePage() {
 
         <Link
           to="/scan-receipt"
-          className="group bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-shadow flex items-center gap-4"
+          className="group bg-white rounded-2xl shadow-sm p-6 card-hover flex items-center gap-4"
         >
-          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-200">
             <Camera size={22} className="text-blue-600" />
           </div>
           <div>
@@ -101,10 +101,7 @@ export default function HomePage() {
         {fetchStatus === 'succeeded' && recentExpenses.length === 0 && (
           <div className="text-center py-10 px-6">
             <p className="text-slate-500 text-sm mb-4">No expenses yet — let's fix that.</p>
-            <Link
-              to="/add-expense"
-              className="inline-block bg-amber-500 text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-amber-600 transition-colors"
-            >
+            <Link to="/add-expense" className="btn-primary inline-block px-5 py-2 text-sm">
               Add your first expense
             </Link>
           </div>

@@ -14,7 +14,7 @@ import { db } from '../../services/firebase'
 
 export const addExpense = createAsyncThunk(
   'expenses/addExpense',
-  async ({ userId, amount, merchant, category, date, note }, { rejectWithValue }) => {
+  async ({ userId, amount, merchant, category, date, note, paymentMethod, location }, { rejectWithValue }) => {
     try {
       const docRef = await addDoc(collection(db, 'expenses'), {
         userId,
@@ -23,6 +23,8 @@ export const addExpense = createAsyncThunk(
         category,
         date,
         note: note || '',
+        paymentMethod: paymentMethod || '',
+        location: location || '',
         createdAt: serverTimestamp(),
       })
       return {
@@ -33,6 +35,8 @@ export const addExpense = createAsyncThunk(
         category,
         date,
         note: note || '',
+        paymentMethod: paymentMethod || '',
+        location: location || '',
       }
     } catch (error) {
       return rejectWithValue(error.message)
@@ -55,9 +59,17 @@ export const fetchExpenses = createAsyncThunk(
 
 export const updateExpense = createAsyncThunk(
   'expenses/updateExpense',
-  async ({ id, amount, merchant, category, date, note }, { rejectWithValue }) => {
+  async ({ id, amount, merchant, category, date, note, paymentMethod, location }, { rejectWithValue }) => {
     try {
-      const changes = { amount: Number(amount), merchant, category, date, note: note || '' }
+      const changes = {
+        amount: Number(amount),
+        merchant,
+        category,
+        date,
+        note: note || '',
+        paymentMethod: paymentMethod || '',
+        location: location || '',
+      }
       await updateDoc(doc(db, 'expenses', id), changes)
       return { id, ...changes }
     } catch (error) {
@@ -80,9 +92,9 @@ export const deleteExpense = createAsyncThunk(
 
 const initialState = {
   items: [],
-  status: 'idle',      // for adding
+  status: 'idle',
   error: null,
-  fetchStatus: 'idle',  // for the list fetch — separate so Add and List pages don't interfere with each other
+  fetchStatus: 'idle',
   fetchError: null,
 }
 

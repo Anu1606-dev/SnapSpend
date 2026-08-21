@@ -207,16 +207,10 @@ export default function ExpenseListPage() {
                     />
                   </div>
                   <div className="flex gap-2 pt-1">
-                    <button
-                      onClick={() => handleEditSave(expense.id)}
-                      className="bg-amber-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
-                    >
+                    <button onClick={() => handleEditSave(expense.id)} className="btn-primary px-4 py-1.5 text-sm">
                       Save
                     </button>
-                    <button
-                      onClick={handleEditCancel}
-                      className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-slate-200 transition-colors"
-                    >
+                    <button onClick={handleEditCancel} className="btn-secondary px-4 py-1.5 text-sm">
                       Cancel
                     </button>
                   </div>
@@ -251,7 +245,7 @@ export default function ExpenseListPage() {
                       <button
                         onClick={() => handleEditClick(expense)}
                         aria-label="Edit expense"
-                        className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-2 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 hover:scale-110 transition-colors"
                       >
                         <Pencil size={15} />
                       </button>
@@ -259,7 +253,7 @@ export default function ExpenseListPage() {
                         onClick={() => handleDelete(expense.id)}
                         disabled={deletingId === expense.id}
                         aria-label="Delete expense"
-                        className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 hover:scale-110 transition-colors disabled:opacity-50"
                       >
                         <Trash2 size={15} />
                       </button>

@@ -114,7 +114,7 @@ export default function ReceiptUploadPage() {
             <button
               onClick={handleExtract}
               disabled={extracting}
-              className="w-full bg-blue-600 text-white py-2.5 rounded-full font-semibold text-sm hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="btn-primary w-full py-2.5 text-sm"
             >
               <Sparkles size={16} className={extracting ? 'animate-pulse' : ''} />
               {extracting ? 'Reading receipt...' : 'Extract Details'}

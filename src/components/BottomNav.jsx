@@ -52,7 +52,7 @@ export default function BottomNav() {
         <div className="flex-1 flex justify-center -mt-5">
           <button
             onClick={() => setShowActions((s) => !s)}
-            className="w-14 h-14 rounded-full bg-amber-500 text-white shadow-lg flex items-center justify-center hover:bg-amber-600 transition-colors"
+            className="w-14 h-14 rounded-full bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform duration-200"
           >
             <Plus size={26} strokeWidth={2.5} />
           </button>

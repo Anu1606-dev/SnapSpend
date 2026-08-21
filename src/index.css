@@ -4,3 +4,24 @@
 body {
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Shared interactive motion, used on every primary/secondary button and
+   every hoverable card across the app — one place to tune the "feel". */
+.btn-primary {
+  @apply bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-full
+         shadow-sm shadow-amber-500/20 transition-all duration-200
+         hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/30
+         active:translate-y-0 active:scale-[0.98]
+         disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm;
+}
+
+.btn-secondary {
+  @apply bg-slate-100 text-slate-600 font-medium rounded-full
+         transition-all duration-200
+         hover:-translate-y-0.5 hover:bg-slate-200
+         active:translate-y-0 active:scale-[0.98];
+}
+
+.card-hover {
+  @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+}
