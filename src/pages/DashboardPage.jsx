@@ -1,42 +1,24 @@
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
+  PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts'
 import {
-  Wallet,
-  CalendarDays,
-  Receipt,
-  TrendingUp,
-  TrendingDown,
-  PieChart as PieChartIcon,
-  BarChart3,
+  Wallet, CalendarDays, Receipt, TrendingUp, TrendingDown, PieChart as PieChartIcon, BarChart3,
 } from 'lucide-react'
 import { fetchExpenses } from '../features/expenses/expensesSlice'
 import { CATEGORY_COLORS } from '../utils/categories'
 import { getLocalDateString } from '../utils/date'
+import { useIsDarkMode } from '../hooks/useIsDarkMode'
 import {
-  getCurrentMonthTotal,
-  getPreviousMonthTotal,
-  getCurrentMonthCount,
-  getCategoryBreakdown,
-  getMonthlyTrend,
+  getCurrentMonthTotal, getPreviousMonthTotal, getCurrentMonthCount, getCategoryBreakdown, getMonthlyTrend,
 } from '../utils/expenseCalculations'
 
 export default function DashboardPage() {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
   const { items, fetchStatus, fetchError } = useSelector((state) => state.expenses)
+  const isDark = useIsDarkMode()
 
   useEffect(() => {
     if (user) {
@@ -52,75 +34,68 @@ export default function DashboardPage() {
   const currentMonthKey = useMemo(() => getLocalDateString().slice(0, 7), [])
 
   const percentChange =
-    previousMonthTotal > 0
-      ? ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) * 100
-      : null
+    previousMonthTotal > 0 ? ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) * 100 : null
+
+  const gridColor = isDark ? '#334155' : '#f1f5f9'
+  const axisColor = isDark ? '#475569' : '#e2e8f0'
+  const tickColor = isDark ? '#94a3b8' : '#94a3b8'
+  const tooltipBg = isDark ? '#1e293b' : '#ffffff'
+  const cursorFill = isDark ? '#334155' : '#f8fafc'
 
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-8">
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-slate-500 text-sm mt-1">Your spending, visualized.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Your spending, visualized.</p>
       </div>
 
-      {fetchStatus === 'loading' && (
-        <p className="text-center text-slate-400 text-sm py-16">Loading your data...</p>
-      )}
-
-      {fetchStatus === 'failed' && (
-        <p className="text-center text-red-600 text-sm py-16">{fetchError}</p>
-      )}
+      {fetchStatus === 'loading' && <p className="text-center text-slate-400 text-sm py-16">Loading your data...</p>}
+      {fetchStatus === 'failed' && <p className="text-center text-red-600 dark:text-red-400 text-sm py-16">{fetchError}</p>}
 
       {fetchStatus === 'succeeded' && (
         <>
-          {/* Stat cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-5 card-hover">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
-                  <Wallet size={16} className="text-amber-600" />
+                <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center">
+                  <Wallet size={16} className="text-amber-600 dark:text-amber-400" />
                 </div>
-                <p className="text-sm text-slate-500">This Month</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">This Month</p>
               </div>
-              <p className="text-2xl font-bold text-slate-900">₹{currentMonthTotal.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">₹{currentMonthTotal.toFixed(2)}</p>
               {percentChange !== null && (
-                <div
-                  className={`flex items-center gap-1 text-xs mt-1.5 ${
-                    percentChange >= 0 ? 'text-red-600' : 'text-emerald-600'
-                  }`}
-                >
+                <div className={`flex items-center gap-1 text-xs mt-1.5 ${percentChange >= 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                   {percentChange >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                   {Math.abs(percentChange).toFixed(1)}% vs last month
                 </div>
               )}
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-5 card-hover">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                  <CalendarDays size={16} className="text-blue-600" />
+                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+                  <CalendarDays size={16} className="text-blue-600 dark:text-blue-400" />
                 </div>
-                <p className="text-sm text-slate-500">Last Month</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Last Month</p>
               </div>
-              <p className="text-2xl font-bold text-slate-900">₹{previousMonthTotal.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">₹{previousMonthTotal.toFixed(2)}</p>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm p-5 card-hover">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-5 card-hover">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-violet-50 flex items-center justify-center">
-                  <Receipt size={16} className="text-violet-600" />
+                <div className="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-500/10 flex items-center justify-center">
+                  <Receipt size={16} className="text-violet-600 dark:text-violet-400" />
                 </div>
-                <p className="text-sm text-slate-500">Transactions</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Transactions</p>
               </div>
-              <p className="text-2xl font-bold text-slate-900">{currentMonthCount}</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">{currentMonthCount}</p>
             </div>
           </div>
 
-          {/* Category breakdown */}
-          <div className="bg-white rounded-2xl shadow-sm p-5 md:p-6 mb-6">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-5 md:p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
               <PieChartIcon size={18} className="text-slate-400" />
-              <h2 className="font-semibold text-slate-900">Spending by Category</h2>
+              <h2 className="font-semibold text-slate-900 dark:text-white">Spending by Category</h2>
               <span className="text-xs text-slate-400">This month</span>
             </div>
             {categoryBreakdown.length === 0 ? (
@@ -141,18 +116,20 @@ export default function DashboardPage() {
                       <Cell key={entry.category} fill={CATEGORY_COLORS[entry.category]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} />
-                  <Legend />
+                  <Tooltip
+                    formatter={(value) => `₹${value.toFixed(2)}`}
+                    contentStyle={{ backgroundColor: tooltipBg, border: 'none', borderRadius: '8px', color: isDark ? '#f1f5f9' : '#0f172a' }}
+                  />
+                  <Legend wrapperStyle={{ color: tickColor }} />
                 </PieChart>
               </ResponsiveContainer>
             )}
           </div>
 
-          {/* Monthly trend */}
-          <div className="bg-white rounded-2xl shadow-sm p-5 md:p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-5 md:p-6">
             <div className="flex items-center gap-2 mb-1">
               <BarChart3 size={18} className="text-slate-400" />
-              <h2 className="font-semibold text-slate-900">Spending Trend</h2>
+              <h2 className="font-semibold text-slate-900 dark:text-white">Spending Trend</h2>
               <span className="text-xs text-slate-400">Last 6 months</span>
             </div>
             <div className="flex items-center gap-4 mb-3 ml-6">
@@ -173,16 +150,17 @@ export default function DashboardPage() {
                     <stop offset="100%" stopColor="#3b82f6" />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="label" tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={{ stroke: '#e2e8f0' }} />
-                <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={{ stroke: '#e2e8f0' }} />
-                <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} cursor={{ fill: '#f8fafc' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="label" tick={{ fontSize: 12, fill: tickColor }} axisLine={{ stroke: axisColor }} />
+                <YAxis tick={{ fontSize: 12, fill: tickColor }} axisLine={{ stroke: axisColor }} />
+                <Tooltip
+                  formatter={(value) => `₹${value.toFixed(2)}`}
+                  cursor={{ fill: cursorFill }}
+                  contentStyle={{ backgroundColor: tooltipBg, border: 'none', borderRadius: '8px', color: isDark ? '#f1f5f9' : '#0f172a' }}
+                />
                 <Bar dataKey="total" radius={[6, 6, 0, 0]}>
                   {monthlyTrend.map((entry) => (
-                    <Cell
-                      key={entry.key}
-                      fill={entry.key === currentMonthKey ? '#f59e0b' : 'url(#trendGradient)'}
-                    />
+                    <Cell key={entry.key} fill={entry.key === currentMonthKey ? '#f59e0b' : 'url(#trendGradient)'} />
                   ))}
                 </Bar>
               </BarChart>

@@ -9,6 +9,7 @@ import ExpenseListPage from './pages/ExpenseListPage'
 import DashboardPage from './pages/DashboardPage'
 import ChatPage from './pages/ChatPage'
 import BudgetPage from './pages/BudgetPage'
+import ProfilePage from './pages/ProfilePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppLayout from './components/AppLayout'
 
@@ -34,9 +35,10 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/budget" element={<BudgetPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   )
 }
 
-export default App
+export default App;

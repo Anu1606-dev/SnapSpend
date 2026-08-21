@@ -22,12 +22,11 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Branding panel — hidden on mobile, shown from the "lg" breakpoint up */}
       <div className="hidden lg:flex lg:w-1/2 bg-slate-900 flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-32 -left-16 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
 
-        <span className="relative text-2xl font-extrabold bg-linear-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+        <span className="relative text-2xl font-extrabold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
           SnapSpend
         </span>
 
@@ -43,45 +42,44 @@ export default function LoginPage() {
         <p className="relative text-xs text-slate-500">© 2026 SnapSpend</p>
       </div>
 
-      {/* Form panel */}
-      <div className="flex-1 flex items-center justify-center bg-slate-50 px-6 py-12">
+      <div className="flex-1 flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-6 py-12 transition-colors duration-200">
         <div className="w-full max-w-sm">
           <div className="lg:hidden text-center mb-8">
-            <span className="text-2xl font-extrabold bg-linear-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent">
+            <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 to-emerald-500 bg-clip-text text-transparent">
               SnapSpend
             </span>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back</h1>
-          <p className="text-sm text-slate-500 mb-8">Log in to keep track of your spending.</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">Welcome back</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">Log in to keep track of your spending.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-xl">
+              <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 px-3 py-2 rounded-xl">
                 {error}
               </p>
             )}
@@ -95,9 +93,9 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-sm text-slate-500 mt-6 text-center">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-6 text-center">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-blue-600 font-medium hover:underline">
+            <Link to="/signup" className="text-blue-600 dark:text-blue-400 font-medium hover:underline">
               Sign up
             </Link>
           </p>

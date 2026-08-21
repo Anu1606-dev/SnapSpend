@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@custom-variant dark (&:where(.dark, .dark *));
 
 body {
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
@@ -17,7 +18,8 @@ body {
   @apply bg-slate-100 text-slate-600 font-medium rounded-full
          transition-all duration-200
          hover:-translate-y-0.5 hover:bg-slate-200
-         active:translate-y-0 active:scale-[0.98];
+         active:translate-y-0 active:scale-[0.98]
+         dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600;
 }
 
 .card-hover {
