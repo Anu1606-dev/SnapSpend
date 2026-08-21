@@ -17,8 +17,6 @@ function fileToBase64(file) {
   })
 }
 
-// Retries transient failures (503 = servers busy, 429 = rate limited).
-// Any other error fails immediately since retrying won't help.
 async function withRetry(callFn, maxRetries = 2) {
   let lastError
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -157,10 +155,6 @@ const listExpensesDeclaration = {
   },
 }
 
-// These run entirely on your machine against the expenses already loaded
-// from Firestore — Gemini never sees or touches your raw data directly,
-// it only ever receives the computed result.
-
 function runGetExpenseSummary(args, expenses) {
   const { startDate, endDate, category } = args || {}
   let filtered = expenses
@@ -213,10 +207,6 @@ function executeFunctionCall(name, args, expenses) {
   return { error: `Unknown function: ${name}` }
 }
 
-// Creates one persistent chat session. The Chat object keeps its own
-// conversation history internally, so calling sendChatMessage() repeatedly
-// on the SAME session lets follow-up questions ("what about last month?")
-// stay in context.
 export function createExpenseChatSession() {
   const today = getLocalDateString()
 
@@ -234,15 +224,21 @@ Keep answers short and conversational — a sentence or two, not a report. Use �
   })
 }
 
+// Returns { text, sourceCount } — sourceCount is how many real transactions
+// backed the answer (from whichever tool ran last), or null if no tool was
+// used at all. The Chat page uses this to show a "Sourced from N
+// transactions" trust indicator under AI answers.
 export async function sendChatMessage(chatSession, userMessage, expenses) {
   let response = await withRetry(() => chatSession.sendMessage({ message: userMessage }))
+  let sourceCount = null
 
-  // Function-calling loop: resolve calls until Gemini gives a plain text
-  // answer. Capped at 3 rounds as a safety net against unexpected looping.
   let rounds = 0
   while (response.functionCalls && response.functionCalls.length > 0 && rounds < 3) {
     const call = response.functionCalls[0]
     const result = executeFunctionCall(call.name, call.args, expenses)
+
+    if (typeof result.transactionCount === 'number') sourceCount = result.transactionCount
+    if (typeof result.matchCount === 'number') sourceCount = result.matchCount
 
     response = await withRetry(() =>
       chatSession.sendMessage({
@@ -257,5 +253,8 @@ export async function sendChatMessage(chatSession, userMessage, expenses) {
     rounds++
   }
 
-  return response.text || "I looked into that but couldn't come up with a clear answer — try rephrasing?"
+  return {
+    text: response.text || "I looked into that but couldn't come up with a clear answer — try rephrasing?",
+    sourceCount,
+  }
 }

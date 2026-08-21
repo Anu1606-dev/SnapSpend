@@ -1,7 +1,5 @@
-import { NavLink, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { Home, LayoutDashboard, List, Plus, Camera, MessageCircle, LogOut } from 'lucide-react'
-import { logOutUser } from '../features/auth/authSlice'
+import { NavLink } from 'react-router-dom'
+import { Home, LayoutDashboard, List, Plus, Camera, MessageCircle } from 'lucide-react'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Home', icon: Home },
@@ -13,14 +11,6 @@ const NAV_ITEMS = [
 ]
 
 export default function Sidebar() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-
-  const handleLogout = async () => {
-    await dispatch(logOutUser())
-    navigate('/login')
-  }
-
   return (
     <aside className="hidden md:flex md:flex-col w-60 shrink-0 bg-slate-900 text-slate-200 min-h-screen sticky top-0">
       <div className="px-6 py-6">
@@ -51,16 +41,6 @@ export default function Sidebar() {
           )
         })}
       </nav>
-
-      <div className="px-3 pb-6">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800/60 hover:text-red-400 transition-colors"
-        >
-          <LogOut size={18} strokeWidth={2} />
-          Log Out
-        </button>
-      </div>
     </aside>
   )
 }

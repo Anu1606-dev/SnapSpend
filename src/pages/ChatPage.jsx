@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Send, Bot } from 'lucide-react'
 import { fetchExpenses } from '../features/expenses/expensesSlice'
 import { createExpenseChatSession, sendChatMessage } from '../services/gemini'
 
@@ -10,9 +10,18 @@ const STARTER_PROMPTS = [
   'Show me my Food expenses this week',
 ]
 
+function TypingDots() {
+  return (
+    <div className="flex items-center gap-1.5 px-4 py-3">
+      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+    </div>
+  )
+}
+
 export default function ChatPage() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth)
   const { items, fetchStatus } = useSelector((state) => state.expenses)
 
@@ -32,14 +41,12 @@ export default function ChatPage() {
     if (user) {
       dispatch(fetchExpenses(user.uid))
     }
-    // One chat session per visit to this page — it remembers the
-    // conversation so far, so follow-up questions stay in context.
     chatSessionRef.current = createExpenseChatSession()
   }, [user, dispatch])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, sending])
 
   const handleSend = async (textOverride) => {
     const text = (textOverride ?? input).trim()
@@ -50,8 +57,8 @@ export default function ChatPage() {
     setSending(true)
 
     try {
-      const replyText = await sendChatMessage(chatSessionRef.current, text, items)
-      setMessages((prev) => [...prev, { role: 'assistant', text: replyText }])
+      const { text: replyText, sourceCount } = await sendChatMessage(chatSessionRef.current, text, items)
+      setMessages((prev) => [...prev, { role: 'assistant', text: replyText, sourceCount }])
     } catch (err) {
       console.error('Chat request failed:', err)
       setMessages((prev) => [
@@ -69,81 +76,93 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="max-w-2xl mx-auto w-full flex flex-col flex-1 p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-gray-800">Ask SnapSpend</h1>
-          <button onClick={() => navigate('/')} className="text-sm text-blue-600 hover:underline">
-            ← Back home
-          </button>
-        </div>
+    <div className="max-w-3xl mx-auto p-6 md:p-8 flex flex-col" style={{ minHeight: 'calc(100vh - 64px)' }}>
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Ask SnapSpend</h1>
+        <p className="text-slate-500 text-sm mt-1">Real answers, pulled from your real spending.</p>
+      </div>
 
-        {fetchStatus === 'loading' && (
-          <p className="text-sm text-gray-400 mb-2">Loading your expense data...</p>
-        )}
+      <div
+        className="flex-1 bg-white rounded-2xl shadow-sm p-4 md:p-5 overflow-y-auto mb-4 space-y-4"
+        style={{ minHeight: '400px', maxHeight: '60vh' }}
+      >
+        {fetchStatus === 'loading' && <p className="text-xs text-slate-400">Loading your expense data...</p>}
 
-        <div
-          className="flex-1 bg-white rounded-lg shadow-sm p-4 overflow-y-auto mb-4 space-y-3"
-          style={{ minHeight: '400px', maxHeight: '60vh' }}
-        >
-          {messages.map((msg, i) => (
-            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+        {messages.map((msg, i) => (
+          <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            {msg.role === 'assistant' && (
+              <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center shrink-0">
+                <Bot size={16} className="text-emerald-400" />
+              </div>
+            )}
+            <div className="max-w-[75%] flex flex-col gap-1">
               <div
-                className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm ${
+                className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                   msg.role === 'user'
                     ? 'bg-blue-600 text-white rounded-br-sm'
-                    : 'bg-gray-100 text-gray-800 rounded-bl-sm'
+                    : 'bg-slate-100 text-slate-800 rounded-bl-sm'
                 }`}
               >
                 {msg.text}
               </div>
+              {msg.role === 'assistant' && typeof msg.sourceCount === 'number' && (
+                <span className="text-xs text-slate-400 px-1">
+                  {msg.sourceCount > 0
+                    ? `Sourced from ${msg.sourceCount} matching transaction${msg.sourceCount !== 1 ? 's' : ''}`
+                    : 'No matching transactions found'}
+                </span>
+              )}
             </div>
-          ))}
+          </div>
+        ))}
 
-          {sending && (
-            <div className="flex justify-start">
-              <div className="bg-gray-100 text-gray-500 px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
-                Thinking...
-              </div>
+        {sending && (
+          <div className="flex gap-2.5 justify-start">
+            <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center shrink-0">
+              <Bot size={16} className="text-emerald-400" />
             </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-
-        {messages.length === 1 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {STARTER_PROMPTS.map((prompt) => (
-              <button
-                key={prompt}
-                onClick={() => handleSend(prompt)}
-                disabled={sending}
-                className="text-xs bg-white border border-gray-200 text-gray-600 px-3 py-1.5 rounded-full hover:bg-gray-50 disabled:opacity-50"
-              >
-                {prompt}
-              </button>
-            ))}
+            <div className="bg-slate-100 rounded-2xl rounded-bl-sm">
+              <TypingDots />
+            </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about your spending..."
-            disabled={sending}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={sending || !input.trim()}
-            className="bg-blue-600 text-white px-5 py-2 rounded-full font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            Send
-          </button>
-        </form>
+        <div ref={messagesEndRef} />
       </div>
+
+      {messages.length === 1 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {STARTER_PROMPTS.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => handleSend(prompt)}
+              disabled={sending}
+              className="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-full hover:bg-slate-50 hover:border-slate-300 transition-colors disabled:opacity-50"
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Ask about your spending..."
+          disabled={sending}
+          className="flex-1 px-4 py-2.5 border border-slate-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={sending || !input.trim()}
+          className="w-11 h-11 shrink-0 bg-amber-500 text-white rounded-full flex items-center justify-center hover:bg-amber-600 active:scale-95 transition-all disabled:opacity-50"
+          aria-label="Send message"
+        >
+          <Send size={18} />
+        </button>
+      </form>
     </div>
   )
 }
