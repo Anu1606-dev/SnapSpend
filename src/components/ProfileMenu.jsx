@@ -31,7 +31,7 @@ export default function ProfileMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+        className="flex items-center gap-1.5 pl-1 pr-2 py-1 rounded-full hover:bg-slate-100 dark:hover:bg-bg-card transition-colors"
       >
         <span
           className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold shrink-0"
@@ -39,21 +39,21 @@ export default function ProfileMenu() {
         >
           {initial}
         </span>
-        <ChevronDown size={14} className={`text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown size={14} className={`text-slate-400 dark:text-mist transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden animate-fade-in-up z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-bg-card rounded-xl shadow-lg border border-slate-100 dark:border-line overflow-hidden animate-fade-in-up z-50">
           <button
             onClick={() => { setOpen(false); navigate('/profile') }}
-            className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-600 dark:text-fog hover:bg-slate-50 dark:hover:bg-bg-inset transition-colors"
           >
             <User size={16} />
             Profile
           </button>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors border-t border-slate-100 dark:border-slate-700"
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-600 dark:text-coral hover:bg-red-50 dark:hover:bg-coral/10 transition-colors border-t border-slate-100 dark:border-line"
           >
             <LogOut size={16} />
             Logout

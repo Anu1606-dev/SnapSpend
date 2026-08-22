@@ -7,9 +7,9 @@ import { CATEGORIES, CATEGORY_COLORS } from '../utils/categories'
 import { PAYMENT_METHODS } from '../utils/paymentMethods'
 import { getLocalDateString } from '../utils/date'
 
-const fieldLabel = 'flex items-center gap-1.5 text-sm font-medium text-slate-700 mb-1.5'
+const fieldLabel = 'flex items-center gap-1.5 text-sm font-medium text-slate-700 dark:text-fog mb-1.5'
 const fieldInput =
-  'w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
+  'w-full px-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
 
 export default function AddExpensePage() {
   const [amount, setAmount] = useState('')
@@ -67,21 +67,20 @@ export default function AddExpensePage() {
   return (
     <div className="max-w-xl mx-auto p-6 md:p-8">
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Add Expense</h1>
-        <p className="text-slate-500 text-sm mt-1">Log a purchase with all the details.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Add Expense</h1>
+        <p className="text-slate-500 dark:text-fog text-sm mt-1">Log a purchase with all the details.</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm p-6 md:p-8">
+      <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm p-6 md:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Section: the essentials */}
           <div className="space-y-4">
             <div>
               <label className={fieldLabel}>
-                <Wallet size={14} className="text-slate-400" />
+                <Wallet size={14} className="text-slate-400 dark:text-mist" />
                 Amount
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-mist text-sm">₹</span>
                 <input
                   type="number"
                   step="0.01"
@@ -97,7 +96,7 @@ export default function AddExpensePage() {
 
             <div>
               <label className={fieldLabel}>
-                <Store size={14} className="text-slate-400" />
+                <Store size={14} className="text-slate-400 dark:text-mist" />
                 Merchant
               </label>
               <input
@@ -111,21 +110,20 @@ export default function AddExpensePage() {
             </div>
           </div>
 
-          <hr className="border-slate-100" />
+          <hr className="border-slate-100 dark:border-line" />
 
-          {/* Section: category & payment */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className={fieldLabel + ' mb-0'}>
-                  <Tag size={14} className="text-slate-400" />
+                  <Tag size={14} className="text-slate-400 dark:text-mist" />
                   Category
                 </label>
               </div>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className={`${fieldInput} bg-white`}
+                className={`${fieldInput} bg-white dark:bg-bg-inset`}
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -135,23 +133,23 @@ export default function AddExpensePage() {
                 type="button"
                 onClick={handleSuggestCategory}
                 disabled={!merchant || suggesting}
-                className="mt-1.5 flex items-center gap-1 text-xs font-medium text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full hover:bg-violet-100 disabled:opacity-40 disabled:hover:bg-violet-50 transition-colors"
+                className="mt-1.5 flex items-center gap-1 text-xs font-medium text-violet-600 dark:text-teal bg-violet-50 dark:bg-teal-deep px-2.5 py-1 rounded-full hover:bg-violet-100 dark:hover:bg-teal-deep disabled:opacity-40 disabled:hover:bg-violet-50 dark:disabled:hover:bg-teal-deep transition-colors"
               >
                 <Sparkles size={12} />
                 {suggesting ? 'Thinking...' : 'Suggest with AI'}
               </button>
-              {suggestError && <p className="text-xs text-amber-600 mt-1.5">{suggestError}</p>}
+              {suggestError && <p className="text-xs text-amber-600 dark:text-amber mt-1.5">{suggestError}</p>}
             </div>
 
             <div>
               <label className={fieldLabel}>
-                <CreditCard size={14} className="text-slate-400" />
+                <CreditCard size={14} className="text-slate-400 dark:text-mist" />
                 Payment
               </label>
               <select
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
-                className={`${fieldInput} bg-white`}
+                className={`${fieldInput} bg-white dark:bg-bg-inset`}
               >
                 {PAYMENT_METHODS.map((method) => (
                   <option key={method} value={method}>{method}</option>
@@ -160,11 +158,10 @@ export default function AddExpensePage() {
             </div>
           </div>
 
-          {/* Section: date & location */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={fieldLabel}>
-                <CalendarDays size={14} className="text-slate-400" />
+                <CalendarDays size={14} className="text-slate-400 dark:text-mist" />
                 Date
               </label>
               <input
@@ -178,8 +175,8 @@ export default function AddExpensePage() {
 
             <div>
               <label className={fieldLabel}>
-                <MapPin size={14} className="text-slate-400" />
-                Location <span className="text-slate-400 font-normal ml-1">(optional)</span>
+                <MapPin size={14} className="text-slate-400 dark:text-mist" />
+                Location <span className="text-slate-400 dark:text-mist font-normal ml-1">(optional)</span>
               </label>
               <input
                 type="text"
@@ -193,8 +190,8 @@ export default function AddExpensePage() {
 
           <div>
             <label className={fieldLabel}>
-              <StickyNote size={14} className="text-slate-400" />
-              Note <span className="text-slate-400 font-normal ml-1">(optional)</span>
+              <StickyNote size={14} className="text-slate-400 dark:text-mist" />
+              Note <span className="text-slate-400 dark:text-mist font-normal ml-1">(optional)</span>
             </label>
             <textarea
               value={note}
@@ -205,10 +202,9 @@ export default function AddExpensePage() {
             />
           </div>
 
-          {/* Live preview */}
           {showPreview && (
-            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 p-4">
-              <p className="text-xs font-medium text-slate-400 mb-2">Preview</p>
+            <div className="rounded-2xl border border-dashed border-slate-200 dark:border-line bg-slate-50/70 dark:bg-bg-inset/70 p-4">
+              <p className="text-xs font-medium text-slate-400 dark:text-mist mb-2">Preview</p>
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <span
@@ -216,34 +212,30 @@ export default function AddExpensePage() {
                     style={{ backgroundColor: CATEGORY_COLORS[category] }}
                   />
                   <div className="min-w-0">
-                    <p className="font-medium text-slate-800 truncate">{merchant}</p>
-                    <p className="text-xs text-slate-400 truncate">
+                    <p className="font-medium text-slate-800 dark:text-white truncate">{merchant}</p>
+                    <p className="text-xs text-slate-400 dark:text-mist truncate">
                       {category} · {paymentMethod}
                       {location && ` · ${location}`}
                     </p>
                   </div>
                 </div>
-                <p className="font-bold text-slate-900 shrink-0">₹{Number(amount || 0).toFixed(2)}</p>
+                <p className="font-bold text-slate-900 dark:text-white shrink-0">₹{Number(amount || 0).toFixed(2)}</p>
               </div>
             </div>
           )}
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-100 px-3 py-2 rounded-xl">
+            <p className="text-sm text-red-600 dark:text-coral bg-red-50 dark:bg-coral/10 border border-red-100 dark:border-coral/20 px-3 py-2 rounded-xl">
               {error}
             </p>
           )}
           {successMessage && (
-            <p className="text-sm text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-xl">
+            <p className="text-sm text-emerald-700 dark:text-teal bg-emerald-50 dark:bg-teal-deep border border-emerald-100 dark:border-teal/20 px-3 py-2 rounded-xl">
               {successMessage}
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={status === 'loading'}
-            className="btn-primary w-full py-2.5 text-sm"
-          >
+          <button type="submit" disabled={status === 'loading'} className="btn-primary w-full py-2.5 text-sm">
             {status === 'loading' ? 'Saving...' : 'Save Expense'}
           </button>
         </form>

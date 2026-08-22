@@ -13,9 +13,9 @@ const STARTER_PROMPTS = [
 function TypingDots() {
   return (
     <div className="flex items-center gap-1.5 px-4 py-3">
-      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+      <span className="w-1.5 h-1.5 bg-slate-400 dark:bg-mist rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+      <span className="w-1.5 h-1.5 bg-slate-400 dark:bg-mist rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+      <span className="w-1.5 h-1.5 bg-slate-400 dark:bg-mist rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
     </div>
   )
 }
@@ -79,34 +79,34 @@ export default function ChatPage() {
     <div className="max-w-3xl mx-auto p-6 md:p-8 flex flex-col" style={{ minHeight: 'calc(100vh - 64px)' }}>
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Ask SnapSpend</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Real answers, pulled from your real spending.</p>
+        <p className="text-slate-500 dark:text-fog text-sm mt-1">Real answers, pulled from your real spending.</p>
       </div>
 
       <div
-        className="flex-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 md:p-5 overflow-y-auto mb-4 space-y-4"
+        className="flex-1 bg-white dark:bg-bg-card rounded-2xl shadow-sm p-4 md:p-5 overflow-y-auto mb-4 space-y-4"
         style={{ minHeight: '400px', maxHeight: '60vh' }}
       >
-        {fetchStatus === 'loading' && <p className="text-xs text-slate-400">Loading your expense data...</p>}
+        {fetchStatus === 'loading' && <p className="text-xs text-slate-400 dark:text-mist">Loading your expense data...</p>}
 
         {messages.map((msg, i) => (
           <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
-              <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-700 flex items-center justify-center shrink-0">
-                <Bot size={16} className="text-emerald-400" />
+              <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-bg-inset flex items-center justify-center shrink-0">
+                <Bot size={16} className="text-emerald-400 dark:text-teal" />
               </div>
             )}
             <div className="max-w-[75%] flex flex-col gap-1">
               <div
                 className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                   msg.role === 'user'
-                    ? 'bg-blue-600 text-white rounded-br-sm'
-                    : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-sm'
+                    ? 'bg-blue-600 dark:bg-azure text-white rounded-br-sm'
+                    : 'bg-slate-100 dark:bg-bg-inset text-slate-800 dark:text-white rounded-bl-sm'
                 }`}
               >
                 {msg.text}
               </div>
               {msg.role === 'assistant' && typeof msg.sourceCount === 'number' && (
-                <span className="text-xs text-slate-400 dark:text-slate-500 px-1">
+                <span className="text-xs text-slate-400 dark:text-mist px-1">
                   {msg.sourceCount > 0
                     ? `Sourced from ${msg.sourceCount} matching transaction${msg.sourceCount !== 1 ? 's' : ''}`
                     : 'No matching transactions found'}
@@ -118,10 +118,10 @@ export default function ChatPage() {
 
         {sending && (
           <div className="flex gap-2.5 justify-start">
-            <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-700 flex items-center justify-center shrink-0">
-              <Bot size={16} className="text-emerald-400" />
+            <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-bg-inset flex items-center justify-center shrink-0">
+              <Bot size={16} className="text-emerald-400 dark:text-teal" />
             </div>
-            <div className="bg-slate-100 dark:bg-slate-700 rounded-2xl rounded-bl-sm">
+            <div className="bg-slate-100 dark:bg-bg-inset rounded-2xl rounded-bl-sm">
               <TypingDots />
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function ChatPage() {
               key={prompt}
               onClick={() => handleSend(prompt)}
               disabled={sending}
-              className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-full hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors disabled:opacity-50"
+              className="text-xs bg-white dark:bg-bg-card border border-slate-200 dark:border-line text-slate-600 dark:text-fog px-3 py-1.5 rounded-full hover:bg-slate-50 dark:hover:bg-bg-inset hover:border-slate-300 dark:hover:border-line transition-colors disabled:opacity-50"
             >
               {prompt}
             </button>
@@ -152,12 +152,12 @@ export default function ChatPage() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about your spending..."
           disabled={sending}
-          className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow disabled:opacity-50"
+          className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-card dark:text-white dark:placeholder-mist rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={sending || !input.trim()}
-          className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-white bg-linear-to-r from-amber-500 to-orange-500 shadow-sm shadow-amber-500/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/30 active:translate-y-0 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0"
+          className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center text-white bg-linear-to-r from-amber-500 to-orange-500 dark:bg-none dark:bg-amber shadow-sm shadow-amber-500/20 dark:shadow-amber/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/30 dark:hover:shadow-amber/30 active:translate-y-0 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0"
           aria-label="Send message"
         >
           <Send size={18} />

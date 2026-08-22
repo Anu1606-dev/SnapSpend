@@ -12,32 +12,32 @@ import {
 } from '../utils/budgetCalculations'
 
 const MOOD_STYLES = {
-  happy: { Icon: Smile, iconBg: 'bg-emerald-500', text: 'text-emerald-700 dark:text-emerald-400', heroBg: 'bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-500/10 dark:to-slate-800', ring: 'ring-emerald-100 dark:ring-emerald-500/20' },
-  thinking: { Icon: Brain, iconBg: 'bg-blue-500', text: 'text-blue-700 dark:text-blue-400', heroBg: 'bg-gradient-to-br from-blue-50 to-white dark:from-blue-500/10 dark:to-slate-800', ring: 'ring-blue-100 dark:ring-blue-500/20' },
-  sad: { Icon: Frown, iconBg: 'bg-amber-500', text: 'text-amber-700 dark:text-amber-400', heroBg: 'bg-gradient-to-br from-amber-50 to-white dark:from-amber-500/10 dark:to-slate-800', ring: 'ring-amber-100 dark:ring-amber-500/20' },
-  tensed: { Icon: AlertTriangle, iconBg: 'bg-red-500', text: 'text-red-700 dark:text-red-400', heroBg: 'bg-gradient-to-br from-red-50 to-white dark:from-red-500/10 dark:to-slate-800', ring: 'ring-red-100 dark:ring-red-500/20' },
+  happy: { Icon: Smile, iconBg: 'bg-emerald-500 dark:bg-teal', text: 'text-emerald-700 dark:text-teal', heroBg: 'bg-gradient-to-br from-emerald-50 to-white dark:from-teal/10 dark:to-bg-card', ring: 'ring-emerald-100 dark:ring-teal/20' },
+  thinking: { Icon: Brain, iconBg: 'bg-blue-500 dark:bg-azure', text: 'text-blue-700 dark:text-azure', heroBg: 'bg-gradient-to-br from-blue-50 to-white dark:from-azure/10 dark:to-bg-card', ring: 'ring-blue-100 dark:ring-azure/20' },
+  sad: { Icon: Frown, iconBg: 'bg-amber-500 dark:bg-amber', text: 'text-amber-700 dark:text-amber', heroBg: 'bg-gradient-to-br from-amber-50 to-white dark:from-amber/10 dark:to-bg-card', ring: 'ring-amber-100 dark:ring-amber/20' },
+  tensed: { Icon: AlertTriangle, iconBg: 'bg-red-500 dark:bg-coral', text: 'text-red-700 dark:text-coral', heroBg: 'bg-gradient-to-br from-red-50 to-white dark:from-coral/10 dark:to-bg-card', ring: 'ring-red-100 dark:ring-coral/20' },
 }
 
-const fieldLabel = 'block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5'
-const fieldInput = 'w-full pl-8 pr-4 py-2.5 border border-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
+const fieldLabel = 'block text-sm font-medium text-slate-700 dark:text-fog mb-1.5'
+const fieldInput = 'w-full pl-8 pr-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
 
 function StatCard({ icon: Icon, color, label, value, sub, delay = 0 }) {
   const colorMap = {
-    blue: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
-    violet: 'bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400',
-    emerald: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
-    red: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
-    amber: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
-    teal: 'bg-teal-50 text-teal-600 dark:bg-teal-500/10 dark:text-teal-400',
+    blue: 'bg-blue-50 text-blue-600 dark:bg-azure/15 dark:text-azure',
+    violet: 'bg-violet-50 text-violet-600 dark:bg-azure/15 dark:text-azure',
+    emerald: 'bg-emerald-50 text-emerald-600 dark:bg-teal/15 dark:text-teal',
+    red: 'bg-red-50 text-red-600 dark:bg-coral/15 dark:text-coral',
+    amber: 'bg-amber-50 text-amber-600 dark:bg-amber/15 dark:text-amber',
+    teal: 'bg-teal-50 text-teal-600 dark:bg-teal/15 dark:text-teal',
   }
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 card-hover animate-fade-in-up" style={{ animationDelay: `${delay}ms` }}>
+    <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm p-4 card-hover animate-fade-in-up" style={{ animationDelay: `${delay}ms` }}>
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2 ${colorMap[color]}`}>
         <Icon size={16} />
       </div>
-      <p className="text-xs text-slate-500 dark:text-slate-400 mb-0.5">{label}</p>
+      <p className="text-xs text-slate-500 dark:text-fog mb-0.5">{label}</p>
       <p className="text-lg font-bold text-slate-900 dark:text-white">{value}</p>
-      {sub && <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{sub}</p>}
+      {sub && <p className="text-xs text-slate-400 dark:text-mist mt-0.5">{sub}</p>}
     </div>
   )
 }
@@ -96,10 +96,10 @@ export default function BudgetPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <PiggyBank size={28} className="text-emerald-500" />
+            <PiggyBank size={28} className="text-emerald-500 dark:text-teal" />
             Budget & Savings
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">Set a target, track your pace, know where you stand.</p>
+          <p className="text-slate-500 dark:text-fog text-sm mt-1">Set a target, track your pace, know where you stand.</p>
         </div>
         {hasBudget && !editing && (
           <button
@@ -119,27 +119,27 @@ export default function BudgetPage() {
       {fetchStatus === 'loading' && <p className="text-center text-slate-400 text-sm py-16">Loading...</p>}
 
       {fetchStatus === 'succeeded' && showSetupForm && (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 md:p-8 animate-fade-in-up">
+        <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm p-6 md:p-8 animate-fade-in-up">
           <h2 className="font-semibold text-slate-900 dark:text-white mb-1">{hasBudget ? 'Update your numbers' : "Let's set up your budget"}</h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+          <p className="text-sm text-slate-500 dark:text-fog mb-6">
             {hasBudget ? 'Adjust your income or spending target anytime.' : 'This powers your savings insights and monthly pace tracking.'}
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className={fieldLabel}>Monthly Income</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-mist text-sm">₹</span>
                 <input type="number" min="0" step="0.01" value={incomeInput} onChange={(e) => setIncomeInput(e.target.value)} required placeholder="e.g. 60000" className={fieldInput} />
               </div>
             </div>
             <div>
               <label className={fieldLabel}>Monthly Max Spend (Budget)</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-mist text-sm">₹</span>
                 <input type="number" min="0" step="0.01" value={budgetInput} onChange={(e) => setBudgetInput(e.target.value)} required placeholder="e.g. 40000" className={fieldInput} />
               </div>
             </div>
-            {error && <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 px-3 py-2 rounded-xl">{error}</p>}
+            {error && <p className="text-sm text-red-600 dark:text-coral bg-red-50 dark:bg-coral/10 border border-red-100 dark:border-coral/20 px-3 py-2 rounded-xl">{error}</p>}
             <div className="flex gap-2">
               <button type="submit" disabled={saveStatus === 'loading'} className="btn-primary px-6 py-2.5 text-sm">
                 {saveStatus === 'loading' ? 'Saving...' : 'Save Budget'}
@@ -168,16 +168,16 @@ export default function BudgetPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-5 md:p-6 animate-fade-in-up" style={{ animationDelay: '60ms' }}>
+          <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm p-5 md:p-6 animate-fade-in-up" style={{ animationDelay: '60ms' }}>
             <div className="flex items-center gap-2 mb-4">
-              <Target size={18} className="text-slate-400" />
+              <Target size={18} className="text-slate-400 dark:text-mist" />
               <h2 className="font-semibold text-slate-900 dark:text-white">Budget Pace</h2>
             </div>
-            <div className="relative h-3 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div className="relative h-3 bg-slate-100 dark:bg-bg-inset rounded-full overflow-hidden">
               <div className={`h-full rounded-full transition-all duration-700 ${moodStyle.iconBg}`} style={{ width: `${Math.min(pctBudgetUsed * 100, 100)}%` }} />
-              <div className="absolute top-0 h-full w-0.5 bg-slate-700 dark:bg-slate-200" style={{ left: `${Math.min(monthFraction * 100, 100)}%` }} />
+              <div className="absolute top-0 h-full w-0.5 bg-slate-700 dark:bg-white" style={{ left: `${Math.min(monthFraction * 100, 100)}%` }} />
             </div>
-            <div className="flex justify-between text-xs text-slate-400 dark:text-slate-500 mt-2">
+            <div className="flex justify-between text-xs text-slate-400 dark:text-mist mt-2">
               <span>{Math.round(pctBudgetUsed * 100)}% of budget used</span>
               <span>Day {daysElapsed} of {daysInMonth}</span>
             </div>
