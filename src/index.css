@@ -3,20 +3,21 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-bg-deep: #0E1116;
-  --color-bg-panel: #151C24;
-  --color-bg-card: #1B222B;
-  --color-bg-inset: #141920;
-  --color-line: #2A3442;
-  --color-amber: #EAA054;
-  --color-azure: #2F72D6;
-  --color-azure-deep: #1D3B61;
-  --color-azure-hover: #2D6DAF;
-  --color-teal: #3EB4A4;
-  --color-teal-deep: #0E3331;
-  --color-coral: #E35D43;
-  --color-fog: #8E9BAE;
-  --color-mist: #536275;
+  --color-void: #0A0E1A;
+  --color-surface: #151B30;
+  --color-inset: #10152A;
+  --color-edge: #2A3355;
+  --color-sun: #FFB020;
+  --color-flame: #FF6B4A;
+  --color-electric: #3D8BFF;
+  --color-electric-deep: #2158B8;
+  --color-violet: #A855F7;
+  --color-magenta: #FF4D9E;
+  --color-mint: #1FE6B8;
+  --color-mint-deep: #0F6B5C;
+  --color-rose: #FF5470;
+  --color-cloud: #C3CCE0;
+  --color-smoke: #7C88A6;
 }
 
 body {
@@ -24,12 +25,11 @@ body {
 }
 
 .btn-primary {
-  @apply bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-full
+  @apply bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-full
          shadow-sm shadow-amber-500/20 transition-all duration-200
          hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/30
          active:translate-y-0 active:scale-[0.98]
-         disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm
-         dark:bg-none dark:bg-amber dark:shadow-amber/20 dark:hover:shadow-amber/30;
+         disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm;
 }
 
 .btn-secondary {
@@ -37,7 +37,7 @@ body {
          transition-all duration-200
          hover:-translate-y-0.5 hover:bg-slate-200
          active:translate-y-0 active:scale-[0.98]
-         dark:bg-bg-inset dark:text-fog dark:hover:bg-line;
+         dark:bg-inset dark:text-cloud dark:hover:bg-edge;
 }
 
 .card-hover {

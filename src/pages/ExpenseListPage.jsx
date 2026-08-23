@@ -70,25 +70,25 @@ export default function ExpenseListPage() {
   }
 
   const inputClass =
-    'w-full px-3.5 py-2 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
+    'w-full px-3.5 py-2 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
 
   return (
     <div className="max-w-4xl mx-auto p-6 md:p-8 min-w-0">
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Your Expenses</h1>
-        <p className="text-slate-500 dark:text-fog text-sm mt-1">
+        <p className="text-slate-500 dark:text-cloud text-sm mt-1">
           {filtered.length} expense{filtered.length !== 1 ? 's' : ''}
           {hasActiveFilters ? ' matching your filters' : ' total'}
         </p>
       </div>
 
-      <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm p-4 mb-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 sm:items-end">
+      <div className="bg-white dark:bg-surface rounded-2xl shadow-sm p-4 mb-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 sm:items-end">
         <div>
-          <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1.5">Category</label>
+          <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1.5">Category</label>
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className={`${inputClass} bg-white dark:bg-bg-inset sm:w-auto`}
+            className={`${inputClass} bg-white dark:bg-inset sm:w-auto`}
           >
             <option value="All">All</option>
             {CATEGORIES.map((cat) => (
@@ -98,7 +98,7 @@ export default function ExpenseListPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1.5">From</label>
+          <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1.5">From</label>
           <input
             type="date"
             value={startDate}
@@ -108,7 +108,7 @@ export default function ExpenseListPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1.5">To</label>
+          <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1.5">To</label>
           <input
             type="date"
             value={endDate}
@@ -121,7 +121,7 @@ export default function ExpenseListPage() {
           <div className="flex items-end">
             <button
               onClick={clearFilters}
-              className="text-sm text-slate-500 dark:text-mist hover:text-slate-700 dark:hover:text-fog font-medium pb-2"
+              className="text-sm text-slate-500 dark:text-smoke hover:text-slate-700 dark:hover:text-cloud font-medium pb-2"
             >
               Clear filters
             </button>
@@ -129,18 +129,18 @@ export default function ExpenseListPage() {
         )}
       </div>
 
-      <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-surface rounded-2xl shadow-sm overflow-hidden">
         {fetchStatus === 'loading' && (
           <p className="text-center text-slate-400 text-sm py-12">Loading expenses...</p>
         )}
 
         {fetchStatus === 'failed' && (
-          <p className="text-center text-red-600 dark:text-coral text-sm py-12">{fetchError}</p>
+          <p className="text-center text-red-600 dark:text-rose text-sm py-12">{fetchError}</p>
         )}
 
         {fetchStatus === 'succeeded' && filtered.length === 0 && (
           <div className="text-center py-12 px-6">
-            <p className="text-slate-500 dark:text-fog text-sm">
+            <p className="text-slate-500 dark:text-cloud text-sm">
               {hasActiveFilters ? 'No expenses match these filters.' : 'No expenses yet.'}
             </p>
           </div>
@@ -150,12 +150,12 @@ export default function ExpenseListPage() {
           const color = CATEGORY_COLORS[expense.category] || '#6b7280'
 
           return (
-            <div key={expense.id} className="border-b border-slate-50 dark:border-line last:border-b-0 px-4 sm:px-5 py-4 min-w-0">
+            <div key={expense.id} className="border-b border-slate-50 dark:border-edge last:border-b-0 px-4 sm:px-5 py-4 min-w-0">
               {editingId === expense.id ? (
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1">Amount</label>
+                      <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1">Amount</label>
                       <input
                         type="number"
                         step="0.01"
@@ -165,7 +165,7 @@ export default function ExpenseListPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1">Merchant</label>
+                      <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1">Merchant</label>
                       <input
                         type="text"
                         value={editForm.merchant}
@@ -174,11 +174,11 @@ export default function ExpenseListPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1">Category</label>
+                      <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1">Category</label>
                       <select
                         value={editForm.category}
                         onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
-                        className={`${inputClass} py-1.5 bg-white dark:bg-bg-inset`}
+                        className={`${inputClass} py-1.5 bg-white dark:bg-inset`}
                       >
                         {CATEGORIES.map((cat) => (
                           <option key={cat} value={cat}>{cat}</option>
@@ -186,7 +186,7 @@ export default function ExpenseListPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1">Date</label>
+                      <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1">Date</label>
                       <input
                         type="date"
                         value={editForm.date}
@@ -196,7 +196,7 @@ export default function ExpenseListPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-slate-500 dark:text-mist mb-1">Note</label>
+                    <label className="block text-xs font-medium text-slate-500 dark:text-smoke mb-1">Note</label>
                     <input
                       type="text"
                       value={editForm.note}
@@ -224,12 +224,12 @@ export default function ExpenseListPage() {
                         </p>
                         <span
                           className="text-xs font-medium px-2 py-0.5 rounded-full shrink-0"
-                          style={{ backgroundColor: `${color}1A`, color }}
+                          style={{ backgroundColor: `${color}33`, color }}
                         >
                           {expense.category}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 dark:text-mist mt-0.5 truncate">
+                      <p className="text-xs text-slate-400 dark:text-smoke mt-0.5 truncate">
                         {expense.date}
                         {expense.note && ` · ${expense.note}`}
                       </p>
@@ -242,7 +242,7 @@ export default function ExpenseListPage() {
                       <button
                         onClick={() => handleEditClick(expense)}
                         aria-label="Edit expense"
-                        className="p-2 rounded-lg text-slate-400 dark:text-mist hover:text-blue-600 dark:hover:text-azure hover:bg-blue-50 dark:hover:bg-azure/10 hover:scale-110 transition-all"
+                        className="p-2 rounded-lg text-slate-400 dark:text-smoke hover:text-blue-600 dark:hover:text-electric hover:bg-blue-50 dark:hover:bg-electric/10 hover:scale-110 transition-all"
                       >
                         <Pencil size={15} />
                       </button>
@@ -250,7 +250,7 @@ export default function ExpenseListPage() {
                         onClick={() => handleDelete(expense.id)}
                         disabled={deletingId === expense.id}
                         aria-label="Delete expense"
-                        className="p-2 rounded-lg text-slate-400 dark:text-mist hover:text-red-600 dark:hover:text-coral hover:bg-red-50 dark:hover:bg-coral/10 hover:scale-110 transition-all disabled:opacity-50"
+                        className="p-2 rounded-lg text-slate-400 dark:text-smoke hover:text-red-600 dark:hover:text-rose hover:bg-red-50 dark:hover:bg-rose/10 hover:scale-110 transition-all disabled:opacity-50"
                       >
                         <Trash2 size={15} />
                       </button>

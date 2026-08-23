@@ -89,16 +89,16 @@ export default function ReceiptUploadPage() {
     <div className="max-w-xl mx-auto p-6 md:p-8">
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Scan Receipt</h1>
-        <p className="text-slate-500 dark:text-fog text-sm mt-1">Let AI read the details for you.</p>
+        <p className="text-slate-500 dark:text-cloud text-sm mt-1">Let AI read the details for you.</p>
       </div>
 
-      <div className="bg-white dark:bg-bg-card rounded-2xl shadow-sm p-6 md:p-8">
+      <div className="bg-white dark:bg-surface rounded-2xl shadow-sm p-6 md:p-8">
         {!selectedFile && (
-          <label className="flex flex-col items-center justify-center gap-3 w-full border-2 border-dashed border-slate-200 dark:border-line rounded-2xl p-12 text-center cursor-pointer hover:border-blue-400 dark:hover:border-azure hover:bg-blue-50/30 dark:hover:bg-azure/5 transition-colors">
-            <Camera size={36} className="text-slate-300 dark:text-mist" strokeWidth={1.5} />
+          <label className="flex flex-col items-center justify-center gap-3 w-full border-2 border-dashed border-slate-200 dark:border-edge rounded-2xl p-12 text-center cursor-pointer hover:border-blue-400 dark:hover:border-electric hover:bg-blue-50/30 dark:hover:bg-electric/5 transition-colors">
+            <Camera size={36} className="text-slate-300 dark:text-smoke" strokeWidth={1.5} />
             <div>
-              <p className="text-sm font-medium text-slate-700 dark:text-fog">Tap to choose a receipt photo</p>
-              <p className="text-xs text-slate-400 dark:text-mist mt-1">JPG or PNG works best</p>
+              <p className="text-sm font-medium text-slate-700 dark:text-cloud">Tap to choose a receipt photo</p>
+              <p className="text-xs text-slate-400 dark:text-smoke mt-1">JPG or PNG works best</p>
             </div>
             <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
           </label>
@@ -109,19 +109,19 @@ export default function ReceiptUploadPage() {
             <img
               src={previewUrl}
               alt="Receipt preview"
-              className="w-full rounded-2xl border border-slate-100 dark:border-line max-h-80 object-contain bg-slate-50 dark:bg-bg-inset"
+              className="w-full rounded-2xl border border-slate-100 dark:border-edge max-h-80 object-contain bg-slate-50 dark:bg-inset"
             />
             <button
               onClick={handleExtract}
               disabled={extracting}
-              className="w-full bg-blue-600 dark:bg-azure text-white py-2.5 rounded-full font-semibold text-sm hover:bg-blue-700 dark:hover:bg-azure-hover active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-blue-600 to-indigo-600 dark:from-electric dark:to-violet text-white py-2.5 rounded-full font-semibold text-sm hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <Sparkles size={16} className={extracting ? 'animate-pulse' : ''} />
               {extracting ? 'Reading receipt...' : 'Extract Details'}
             </button>
             <button
               onClick={handleChooseDifferent}
-              className="w-full text-sm text-slate-400 dark:text-mist hover:text-slate-600 dark:hover:text-fog transition-colors"
+              className="w-full text-sm text-slate-400 dark:text-smoke hover:text-slate-600 dark:hover:text-cloud transition-colors"
             >
               Choose a different photo
             </button>
@@ -131,7 +131,7 @@ export default function ReceiptUploadPage() {
         {extracted && (
           <form onSubmit={handleSubmit} className="space-y-5">
             {extractError && (
-              <p className="text-sm text-amber-700 dark:text-amber bg-amber-50 dark:bg-amber/10 border border-amber-100 dark:border-amber/20 px-3 py-2 rounded-xl">
+              <p className="text-sm text-amber-700 dark:text-sun bg-amber-50 dark:bg-sun/10 border border-amber-100 dark:border-sun/20 px-3 py-2 rounded-xl">
                 {extractError}
               </p>
             )}
@@ -139,13 +139,13 @@ export default function ReceiptUploadPage() {
             <img
               src={previewUrl}
               alt="Receipt preview"
-              className="w-full rounded-2xl border border-slate-100 dark:border-line max-h-56 object-contain bg-slate-50 dark:bg-bg-inset"
+              className="w-full rounded-2xl border border-slate-100 dark:border-edge max-h-56 object-contain bg-slate-50 dark:bg-inset"
             />
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-fog mb-1.5">Amount</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-cloud mb-1.5">Amount</label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-mist text-sm">₹</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-smoke text-sm">₹</span>
                 <input
                   type="number"
                   step="0.01"
@@ -153,27 +153,27 @@ export default function ReceiptUploadPage() {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   required
-                  className="w-full pl-8 pr-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                  className="w-full pl-8 pr-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-fog mb-1.5">Merchant</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-cloud mb-1.5">Merchant</label>
               <input
                 type="text"
                 value={merchant}
                 onChange={(e) => setMerchant(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
 
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <label className="block text-sm font-medium text-slate-700 dark:text-fog">Category</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-cloud">Category</label>
                 {!extractError && (
-                  <span className="flex items-center gap-1 text-xs font-medium text-violet-600 dark:text-teal bg-violet-50 dark:bg-teal-deep px-2 py-0.5 rounded-full">
+                  <span className="flex items-center gap-1 text-xs font-medium text-white dark:bg-linear-to-r dark:from-mint dark:to-electric bg-violet-600 px-2 py-0.5 rounded-full">
                     <Sparkles size={11} />
                     AI suggested
                   </span>
@@ -182,7 +182,7 @@ export default function ReceiptUploadPage() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -191,28 +191,28 @@ export default function ReceiptUploadPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-fog mb-1.5">Date</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-cloud mb-1.5">Date</label>
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-fog mb-1.5">Note (optional)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-cloud mb-1.5">Note (optional)</label>
               <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 rows={2}
-                className="w-full px-4 py-2.5 border border-slate-200 dark:border-line dark:bg-bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow resize-none"
+                className="w-full px-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow resize-none"
               />
             </div>
 
             {successMessage && (
-              <p className="text-sm text-emerald-700 dark:text-teal bg-emerald-50 dark:bg-teal-deep border border-emerald-100 dark:border-teal/20 px-3 py-2 rounded-xl">
+              <p className="text-sm text-emerald-700 dark:text-mint bg-emerald-50 dark:bg-mint-deep/40 border border-emerald-100 dark:border-mint/30 px-3 py-2 rounded-xl">
                 {successMessage}
               </p>
             )}
