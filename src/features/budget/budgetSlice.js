@@ -8,7 +8,10 @@ export const fetchBudget = createAsyncThunk(
     try {
       const snap = await getDoc(doc(db, 'budgets', userId))
       if (!snap.exists()) return null
-      return snap.data()
+      // Same fix as expenses — strip the non-serializable Timestamp.
+      const data = snap.data()
+      delete data.updatedAt
+      return data
     } catch (error) {
       return rejectWithValue(error.message)
     }

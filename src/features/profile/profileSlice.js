@@ -8,7 +8,10 @@ export const fetchProfile = createAsyncThunk(
     try {
       const snap = await getDoc(doc(db, 'profiles', userId))
       if (!snap.exists()) return null
-      return snap.data()
+      // Same fix as expenses/budget — strip the non-serializable Timestamp.
+      const data = snap.data()
+      delete data.updatedAt
+      return data
     } catch (error) {
       return rejectWithValue(error.message)
     }

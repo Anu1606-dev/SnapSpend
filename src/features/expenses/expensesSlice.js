@@ -50,7 +50,14 @@ export const fetchExpenses = createAsyncThunk(
     try {
       const q = query(collection(db, 'expenses'), where('userId', '==', userId))
       const snapshot = await getDocs(q)
-      return snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+      return snapshot.docs.map((docSnap) => {
+        // Firestore's createdAt comes back as a Timestamp object, not a
+        // plain serializable value. We never display it anywhere in the
+        // UI, so we simply leave it out of what goes into Redux.
+        const data = docSnap.data()
+        delete data.createdAt
+        return { id: docSnap.id, ...data }
+      })
     } catch (error) {
       return rejectWithValue(error.message)
     }
