@@ -11,38 +11,32 @@ export default function ProfilePage() {
   const { user } = useSelector((state) => state.auth)
   const { firstName, lastName, avatarColor, fetchStatus, saveStatus, error } = useSelector((state) => state.profile)
 
-  const [firstNameInput, setFirstNameInput] = useState('')
-  const [lastNameInput, setLastNameInput] = useState('')
-  const [selectedColor, setSelectedColor] = useState(AVATAR_COLORS[0])
-  const [isFirstNameDirty, setIsFirstNameDirty] = useState(false)
-  const [isLastNameDirty, setIsLastNameDirty] = useState(false)
-  const [isColorDirty, setIsColorDirty] = useState(false)
+  const [firstNameInput, setFirstNameInput] = useState(null)
+  const [lastNameInput, setLastNameInput] = useState(null)
+  const [selectedColor, setSelectedColor] = useState(null)
   const [successMessage, setSuccessMessage] = useState('')
+
+  const firstNameValue = firstNameInput ?? firstName ?? ''
+  const lastNameValue = lastNameInput ?? lastName ?? ''
+  const selectedColorValue = selectedColor ?? avatarColor ?? AVATAR_COLORS[0]
 
   useEffect(() => {
     if (user) dispatch(fetchProfile(user.uid))
   }, [user, dispatch])
-
-  const effectiveFirstName = isFirstNameDirty ? firstNameInput : firstName || ''
-  const effectiveLastName = isLastNameDirty ? lastNameInput : lastName || ''
-  const effectiveColor = isColorDirty ? selectedColor : avatarColor || AVATAR_COLORS[0]
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     dispatch(clearProfileError())
     setSuccessMessage('')
     const result = await dispatch(
-      saveProfile({ userId: user.uid, firstName: effectiveFirstName, lastName: effectiveLastName, avatarColor: effectiveColor })
+      saveProfile({ userId: user.uid, firstName: firstNameValue, lastName: lastNameValue, avatarColor: selectedColorValue })
     )
     if (saveProfile.fulfilled.match(result)) {
       setSuccessMessage('Profile updated!')
-      setIsFirstNameDirty(false)
-      setIsLastNameDirty(false)
-      setIsColorDirty(false)
     }
   }
 
-  const initial = effectiveFirstName ? effectiveFirstName.charAt(0).toUpperCase() : '?'
+  const initial = firstNameValue ? firstNameValue.charAt(0).toUpperCase() : '?'
 
   return (
     <div className="max-w-xl mx-auto p-6 md:p-8">
@@ -66,7 +60,7 @@ export default function ProfilePage() {
           <div className="flex justify-center mb-6">
             <span
               className="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg transition-colors duration-300"
-              style={{ backgroundColor: selectedColor }}
+              style={{ backgroundColor: selectedColorValue }}
             >
               {initial}
             </span>
@@ -78,11 +72,8 @@ export default function ProfilePage() {
                 <label className="block text-sm font-medium text-slate-700 dark:text-cloud mb-1.5">First Name</label>
                 <input
                   type="text"
-                  value={effectiveFirstName}
-                  onChange={(e) => {
-                    if (!isFirstNameDirty) setIsFirstNameDirty(true)
-                    setFirstNameInput(e.target.value)
-                  }}
+                  value={firstNameValue}
+                  onChange={(e) => setFirstNameInput(e.target.value)}
                   required
                   placeholder="e.g. Priya"
                   className="w-full px-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
@@ -92,11 +83,8 @@ export default function ProfilePage() {
                 <label className="block text-sm font-medium text-slate-700 dark:text-cloud mb-1.5">Surname</label>
                 <input
                   type="text"
-                  value={effectiveLastName}
-                  onChange={(e) => {
-                    if (!isLastNameDirty) setIsLastNameDirty(true)
-                    setLastNameInput(e.target.value)
-                  }}
+                  value={lastNameValue}
+                  onChange={(e) => setLastNameInput(e.target.value)}
                   placeholder="e.g. Sharma"
                   className="w-full px-4 py-2.5 border border-slate-200 dark:border-edge dark:bg-inset dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                 />
@@ -110,15 +98,12 @@ export default function ProfilePage() {
                   <button
                     key={color}
                     type="button"
-                    onClick={() => {
-                      if (!isColorDirty) setIsColorDirty(true)
-                      setSelectedColor(color)
-                    }}
+                    onClick={() => setSelectedColor(color)}
                     className="w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-150 hover:scale-110"
                     style={{ backgroundColor: color }}
                     aria-label={`Choose avatar color ${color}`}
                   >
-                    {effectiveColor === color && <Check size={16} className="text-white" />}
+                    {selectedColorValue === color && <Check size={16} className="text-white" />}
                   </button>
                 ))}
               </div>

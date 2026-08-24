@@ -112,14 +112,13 @@ export default function AddExpensePage() {
 
           <hr className="border-slate-100 dark:border-edge" />
 
+          {/* Both cells now contain ONLY a label + select — identical structure, guaranteed alignment */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className={fieldLabel + ' mb-0'}>
-                  <Tag size={14} className="text-slate-400 dark:text-smoke" />
-                  Category
-                </label>
-              </div>
+              <label className={fieldLabel}>
+                <Tag size={14} className="text-slate-400 dark:text-smoke" />
+                Category
+              </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -129,16 +128,6 @@ export default function AddExpensePage() {
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
-              <button
-                type="button"
-                onClick={handleSuggestCategory}
-                disabled={!merchant || suggesting}
-                className="mt-1.5 flex items-center gap-1 text-xs font-medium text-white dark:bg-linear-to-r dark:from-mint dark:to-electric bg-violet-600 px-2.5 py-1 rounded-full hover:opacity-90 disabled:opacity-40 transition-opacity"
-              >
-                <Sparkles size={12} />
-                {suggesting ? 'Thinking...' : 'Suggest with AI'}
-              </button>
-              {suggestError && <p className="text-xs text-amber-600 dark:text-sun mt-1.5">{suggestError}</p>}
             </div>
 
             <div>
@@ -156,6 +145,20 @@ export default function AddExpensePage() {
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* AI suggest button now lives in its own row, outside the grid entirely */}
+          <div>
+            <button
+              type="button"
+              onClick={handleSuggestCategory}
+              disabled={!merchant || suggesting}
+              className="flex items-center gap-1 text-xs font-medium text-white dark:bg-linear-to-r dark:from-mint dark:to-electric bg-violet-600 px-2.5 py-1 rounded-full hover:opacity-90 disabled:opacity-40 transition-opacity"
+            >
+              <Sparkles size={12} />
+              {suggesting ? 'Thinking...' : 'Suggest category with AI'}
+            </button>
+            {suggestError && <p className="text-xs text-amber-600 dark:text-sun mt-1.5">{suggestError}</p>}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
